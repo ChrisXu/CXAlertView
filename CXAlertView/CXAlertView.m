@@ -12,21 +12,16 @@
 #import "CXAlertViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define SCROLL_VIEW_PADDING 10
-#define BUTTON_TOP_PADDING 5
-#define BUTTON_LEFT_PADDING 5
-#define BUTTON_HEIGHT 44
+static CGFloat const kDefaultScrollViewPadding = 10.;
+static CGFloat const kDefaultButtonHeight = 44.;
+static CGFloat const kDefaultContainerWidth = 280.;
+static CGFloat const kDefaultVericalPadding = 10.;
+static CGFloat const kDefaultTopScrollViewMaxHeight = 50.;
+static CGFloat const kDefaultTopScrollViewMinHeight = 10.;
+static CGFloat const kDefaultContentScrollViewMaxHeight = 180.;
+static CGFloat const kDefaultContentScrollViewMinHeight = 0.;
+static CGFloat const kDefaultBottomScrollViewHeight = 44.;
 
-#define CONTAINER_DEFAULT_WIDTH 280
-#define VERICAL_PADDING 10
-
-#define TOP_MAX_HEIGHT 50
-#define TOP_MIN_HEIGHT 10
-
-#define CONTENT_MIN_HEIGHT 0
-#define CONTENT_MAX_HEIGHT 180
-
-#define BOTTOM_HEIGHT 44
 //#define BOTTOM_MIN_HEIGHT 44
 
 @class CXAlertButtonItem;
@@ -95,6 +90,26 @@ static CXAlertView *__cx_alert_current_view;
 
 @implementation CXAlertView
 
++ (void)initialize
+{
+    if (self != [CXAlertView class])
+        return;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^ {
+        CXAlertView *appearance = [self appearance];
+        appearance.viewBackgroundColor = [UIColor whiteColor];
+        appearance.titleColor = [UIColor blackColor];
+        appearance.titleFont = [UIFont boldSystemFontOfSize:20];
+        appearance.buttonFont = [UIFont systemFontOfSize:[UIFont buttonFontSize]];
+        appearance.buttonColor = [UIColor colorWithWhite:0.4 alpha:1];
+        appearance.cancelButtonColor = [UIColor colorWithWhite:0.3 alpha:1];
+        appearance.destructiveButtonColor = [UIColor whiteColor];
+        appearance.cornerRadius = 2;
+        appearance.shadowRadius = 8;
+    });
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -113,6 +128,9 @@ static CXAlertView *__cx_alert_current_view;
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message
 {
+    _vericalPadding = kDefaultVericalPadding;
+    _containerWidth = kDefaultContainerWidth;
+    
     UILabel *messageLabel = [[UILabel alloc] init];
     messageLabel.textAlignment = NSTextAlignmentCenter;
     messageLabel.backgroundColor = [UIColor clearColor];
@@ -120,7 +138,7 @@ static CXAlertView *__cx_alert_current_view;
     messageLabel.textColor = [UIColor blackColor];
     messageLabel.numberOfLines = 0;
     messageLabel.text = message;
-    messageLabel.frame = CGRectMake( VERICAL_PADDING, 0, CONTAINER_DEFAULT_WIDTH - VERICAL_PADDING*2, [self heightOfLabelWithText:message font:messageLabel.font]);
+    messageLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightOfLabelWithText:message font:messageLabel.font]);
     
     return  [self initWithTitle:title contentView:messageLabel];
 }
@@ -132,41 +150,57 @@ static CXAlertView *__cx_alert_current_view;
         _buttons = [[NSMutableArray alloc] init];
         _title = title;
         _contentView = contentView;
+        
+        _scrollViewPadding = kDefaultScrollViewPadding;
+        _buttonHeight = kDefaultButtonHeight;
+        _containerWidth = kDefaultContainerWidth;
+        _vericalPadding = kDefaultVericalPadding;
+        _topScrollViewMaxHeight = kDefaultTopScrollViewMaxHeight;
+        _topScrollViewMinHeight = kDefaultTopScrollViewMinHeight;
+        _contentScrollViewMaxHeight = kDefaultContentScrollViewMaxHeight;
+        _contentScrollViewMinHeight = kDefaultContentScrollViewMinHeight;
+        _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
     }
     return self;
 }
 // Buttons
-- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertViewHandler)handler
+- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler
 {
     [self setupScrollViews];
     CXAlertButtonItem *button = [self buttonItemWithType:type];
     button.action = handler;
     button.type = type;
     [button setTitle:title forState:UIControlStateNormal];
-    
     if ([_buttons count] == 0) {
-        button.frame = CGRectMake( CONTAINER_DEFAULT_WIDTH/4, 0, CONTAINER_DEFAULT_WIDTH/2, BUTTON_HEIGHT);
+        button.frame = CGRectMake( self.containerWidth/4, 0, self.containerWidth/2, self.buttonHeight);
     }
     else {
         // correct first button
         CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
         CGRect newFrame = firstButton.frame;
         newFrame.origin.x = 0;
-        firstButton.frame = newFrame;
         
-        CGFloat last_y = 0;
-        if ([_buttons lastObject]) {
-            CXAlertButtonItem *lastButton = (CXAlertButtonItem *)[_buttons lastObject];
-            last_y = CGRectGetMaxX(lastButton.frame);
+        CGFloat last_y = self.containerWidth/2 * [_buttons count];
+        
+        button.alpha = 0.;
+        if (self.isVisible) {
+            [UIView animateWithDuration:0.3 animations:^{
+                firstButton.frame = newFrame;
+                button.alpha = 1.;
+                button.frame = CGRectMake( last_y, 0, self.containerWidth/2, self.buttonHeight);
+            }];
         }
-        
-        button.frame = CGRectMake( last_y, 0, CONTAINER_DEFAULT_WIDTH/2, BUTTON_HEIGHT);
+        else {
+            firstButton.frame = newFrame;
+            button.alpha = 1.;
+            button.frame = CGRectMake( last_y, 0, self.containerWidth/2, self.buttonHeight);
+        }
     }
     
     [_buttons addObject:button];
-    [self.bottomScrollView addSubview:button];
+    [_bottomScrollView addSubview:button];
     CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
-    self.bottomScrollView.contentSize = CGSizeMake( newContentWidth, BUTTON_HEIGHT);
+    _bottomScrollView.contentSize = CGSizeMake( newContentWidth, self.buttonHeight);
 }
 
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state
@@ -230,7 +264,6 @@ static CXAlertView *__cx_alert_current_view;
         self.alertWindow = window;
     }
     [self.alertWindow makeKeyAndVisible];
-    
     [self validateLayout];
     
     [self transitionInCompletion:^{
@@ -320,7 +353,7 @@ static CXAlertView *__cx_alert_current_view;
 - (CGFloat)heightOfLabelWithText:(NSString *)text font:(UIFont *)font
 {
     if (text) {
-        CGSize size = [text sizeWithFont:font constrainedToSize:CGSizeMake(CONTAINER_DEFAULT_WIDTH - 2*VERICAL_PADDING - 1, NSUIntegerMax)];
+        CGSize size = [text sizeWithFont:font constrainedToSize:CGSizeMake(self.containerWidth - 2*self.vericalPadding - 1, NSUIntegerMax)];
         
         return size.height;
     }
@@ -331,25 +364,25 @@ static CXAlertView *__cx_alert_current_view;
 - (CGFloat)preferredHeight
 {
     CGFloat height = 0;
-    height += ([self heightForTopScrollView] + SCROLL_VIEW_PADDING);
-    height += ([self heightForContentScrollView] + SCROLL_VIEW_PADDING);
-    height += ([self heightForBottomScrollView] + SCROLL_VIEW_PADDING);
+    height += ([self heightForTopScrollView] + self.scrollViewPadding);
+    height += ([self heightForContentScrollView] + self.scrollViewPadding);
+    height += ([self heightForBottomScrollView] + self.scrollViewPadding);
     return height;
 }
 
 - (CGFloat)heightForTopScrollView
 {
-    return MAX(TOP_MIN_HEIGHT, MIN(TOP_MAX_HEIGHT, CGRectGetHeight(_titleLabel.frame)));
+    return MAX(self.topScrollViewMinHeight, MIN(self.topScrollViewMaxHeight, CGRectGetHeight(_titleLabel.frame)));
 }
 
 - (CGFloat)heightForContentScrollView
 {
-    return MAX(CONTENT_MIN_HEIGHT, MIN(CONTENT_MAX_HEIGHT, CGRectGetHeight(_contentView.frame)));
+    return MAX(self.contentScrollViewMinHeight, MIN(self.contentScrollViewMaxHeight, CGRectGetHeight(self.contentView.frame)));
 }
 
 - (CGFloat)heightForBottomScrollView
 {
-    return BOTTOM_HEIGHT;
+    return self.bottomScrollViewHeight;
 }
 
 - (void)setup
@@ -359,25 +392,14 @@ static CXAlertView *__cx_alert_current_view;
     [self updateTopScrollView];
     [self updateContentScrollView];
     [self updateBottomScrollView];
-    [self invalidateLayout];
 }
 
 - (void)tearDown
 {
     [self.containerView removeFromSuperview];
     
-//    [self.topScrollView removeFromSuperview];
-//    self.topScrollView = nil;
-    
-//    [self.contentScrollView removeFromSuperview];
-//    self.contentScrollView = nil;
-    
-//    [self.bottomScrollView removeFromSuperview];
-//    self.bottomScrollView = nil;
-    
     [self.titleLabel removeFromSuperview];
     self.titleLabel = nil;
-//    self.messageContentView = nil;
     
     [self.alertWindow removeFromSuperview];
     self.alertWindow = nil;
@@ -392,19 +414,19 @@ static CXAlertView *__cx_alert_current_view;
     self.layoutDirty = NO;
 
     CGFloat height = [self preferredHeight];
-    CGFloat left = (self.bounds.size.width - CONTAINER_DEFAULT_WIDTH) * 0.5;
+    CGFloat left = (self.bounds.size.width - self.containerWidth) * 0.5;
     CGFloat top = (self.bounds.size.height - height) * 0.5;
-    self.containerView.transform = CGAffineTransformIdentity;
+    _containerView.transform = CGAffineTransformIdentity;
     if (updateAnimated) {
         updateAnimated = NO;
         [UIView animateWithDuration:0.3 animations:^{
-            self.containerView.frame = CGRectMake(left, top, CONTAINER_DEFAULT_WIDTH, height);
+            _containerView.frame = CGRectMake(left, top, self.containerWidth, height);
         }];
     }
     else {
-        self.containerView.frame = CGRectMake(left, top, CONTAINER_DEFAULT_WIDTH, height);
+        _containerView.frame = CGRectMake(left, top, self.containerWidth, height);
     }
-    self.containerView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.containerView.bounds cornerRadius:self.containerView.layer.cornerRadius].CGPath;
+    _containerView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:_containerView.bounds cornerRadius:_containerView.layer.cornerRadius].CGPath;
 }
 
 - (void)invalidateLayout
@@ -415,33 +437,33 @@ static CXAlertView *__cx_alert_current_view;
 
 - (void)resetTransition
 {
-    [self.containerView.layer removeAllAnimations];
+    [_containerView.layer removeAllAnimations];
 }
 // Scroll Views
 - (void)setupContainerView
 {
-    self.containerView = [[UIView alloc] initWithFrame:self.bounds];
+    _containerView = [[UIView alloc] initWithFrame:self.bounds];
     [self addSubview:self.containerView];
     
-    self.containerView.backgroundColor = _viewBackgroundColor ? _viewBackgroundColor : [UIColor whiteColor];
-    self.containerView.layer.cornerRadius = self.cornerRadius;
-    self.containerView.layer.shadowOffset = CGSizeZero;
-    self.containerView.layer.shadowRadius = self.shadowRadius;
-    self.containerView.layer.shadowOpacity = 0.5;
+    _containerView.backgroundColor = _viewBackgroundColor ? _viewBackgroundColor : [UIColor whiteColor];
+    _containerView.layer.cornerRadius = self.cornerRadius;
+    _containerView.layer.shadowOffset = CGSizeZero;
+    _containerView.layer.shadowRadius = self.shadowRadius;
+    _containerView.layer.shadowOpacity = 0.5;
 }
 
 - (void)setupScrollViews
 {
-    if (!self.topScrollView) {
-        self.topScrollView = [[UIScrollView alloc] init];
+    if (!_topScrollView) {
+        _topScrollView = [[UIScrollView alloc] init];
     }
     
-    if (!self.contentScrollView) {
-        self.contentScrollView = [[UIScrollView alloc] init];
+    if (!_contentScrollView) {
+        _contentScrollView = [[UIScrollView alloc] init];
     }
     
-    if (!self.bottomScrollView) {
-        self.bottomScrollView = [[UIScrollView alloc] init];
+    if (!_bottomScrollView) {
+        _bottomScrollView = [[UIScrollView alloc] init];
     }
 }
 
@@ -450,7 +472,7 @@ static CXAlertView *__cx_alert_current_view;
     if (self.title) {
         if (!_titleLabel) {
             _titleLabel = [[UILabel alloc] init];
-            [self.topScrollView addSubview:_titleLabel];
+            [_topScrollView addSubview:_titleLabel];
         }
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.backgroundColor = [UIColor clearColor];
@@ -463,60 +485,60 @@ static CXAlertView *__cx_alert_current_view;
 #else
         _titleLabel.minimumFontSize = self.titleLabel.font.pointSize * 0.75;
 #endif
-        _titleLabel.frame = CGRectMake( VERICAL_PADDING, 0, CONTAINER_DEFAULT_WIDTH - VERICAL_PADDING*2, [self heightOfLabelWithText:self.title font:_titleLabel.font]);
+        _titleLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightOfLabelWithText:self.title font:_titleLabel.font]);
         _titleLabel.text = self.title;
         
-        self.topScrollView.frame = CGRectMake( 0 , SCROLL_VIEW_PADDING, CONTAINER_DEFAULT_WIDTH, [self heightForTopScrollView]);
-        self.topScrollView.contentSize = _titleLabel.bounds.size;
+        _topScrollView.frame = CGRectMake( 0 , self.scrollViewPadding, self.containerWidth, [self heightForTopScrollView]);
+        _topScrollView.contentSize = _titleLabel.bounds.size;
         
-        if (![self.containerView.subviews containsObject:self.topScrollView]) {
-            [self.containerView addSubview:self.topScrollView];
+        if (![_containerView.subviews containsObject:_topScrollView]) {
+            [_containerView addSubview:_topScrollView];
         }
         
-        [self.topScrollView setScrollEnabled:([self heightForTopScrollView] < CGRectGetHeight(_titleLabel.frame))];
+        [_topScrollView setScrollEnabled:([self heightForTopScrollView] < CGRectGetHeight(_titleLabel.frame))];
 
     }
     else {
         [_titleLabel removeFromSuperview];
         _titleLabel = nil;
-        [self.topScrollView setFrame:CGRectZero];
-        [self.topScrollView removeFromSuperview];
+        [_topScrollView setFrame:CGRectZero];
+        [_topScrollView removeFromSuperview];
     }
 }
 
 - (void)updateContentScrollView
 {
-    for (UIView *view in self.contentScrollView.subviews) {
+    for (UIView *view in _contentScrollView.subviews) {
         [view removeFromSuperview];
     }
     
     if (_contentView) {
         
-        if (CGRectGetWidth(_contentView.frame) < CONTAINER_DEFAULT_WIDTH) {
+        if (CGRectGetWidth(_contentView.frame) < self.containerWidth) {
             CGRect frame = _contentView.frame;
-            frame.origin.x = (CONTAINER_DEFAULT_WIDTH - CGRectGetWidth(_contentView.frame))/2;
+            frame.origin.x = (self.containerWidth - CGRectGetWidth(_contentView.frame))/2;
             _contentView.frame = frame;
         }
         
-        [self.contentScrollView addSubview:_contentView];
+        [_contentScrollView addSubview:_contentView];
         
         CGFloat y = 0;
-        y += [self heightForTopScrollView] + SCROLL_VIEW_PADDING;
+        y += [self heightForTopScrollView] + self.scrollViewPadding;
         
-        y += SCROLL_VIEW_PADDING;
+        y += self.scrollViewPadding;
         
-        self.contentScrollView.frame = CGRectMake( 0, y, CONTAINER_DEFAULT_WIDTH, [self heightForContentScrollView]);
-        self.contentScrollView.contentSize = _contentView.bounds.size;
+        _contentScrollView.frame = CGRectMake( 0, y, self.containerWidth, [self heightForContentScrollView]);
+        _contentScrollView.contentSize = _contentView.bounds.size;
         
-        if (![self.containerView.subviews containsObject:self.contentScrollView]) {
-            [self.containerView addSubview:self.contentScrollView];
+        if (![_containerView.subviews containsObject:_contentScrollView]) {
+            [_containerView addSubview:_contentScrollView];
         }
         
-        [self.contentScrollView setScrollEnabled:([self heightForContentScrollView] < CGRectGetHeight(_contentView.frame))];
+        [_contentScrollView setScrollEnabled:([self heightForContentScrollView] < CGRectGetHeight(_contentView.frame))];
     }
     else {
-        [self.contentScrollView setFrame:CGRectZero];
-        [self.contentScrollView removeFromSuperview];
+        [_contentScrollView setFrame:CGRectZero];
+        [_contentScrollView removeFromSuperview];
     }
     
     [self invalidateLayout];
@@ -526,17 +548,17 @@ static CXAlertView *__cx_alert_current_view;
 {
     CGFloat y = 0;
     
-    y += [self heightForTopScrollView] + SCROLL_VIEW_PADDING;
+    y += [self heightForTopScrollView] + self.scrollViewPadding;
     
-    y += [self heightForContentScrollView] + SCROLL_VIEW_PADDING;
+    y += [self heightForContentScrollView] + self.scrollViewPadding;
     
-    y += SCROLL_VIEW_PADDING;
+    y += self.scrollViewPadding;
     
-    self.bottomScrollView.backgroundColor = [UIColor clearColor];
-    self.bottomScrollView.frame = CGRectMake( 0, y, CONTAINER_DEFAULT_WIDTH, [self heightForBottomScrollView]);
+    _bottomScrollView.backgroundColor = [UIColor clearColor];
+    _bottomScrollView.frame = CGRectMake( 0, y, self.containerWidth, [self heightForBottomScrollView]);
     
-    if (![self.containerView.subviews containsObject:self.bottomScrollView]) {
-        [self.containerView addSubview:self.bottomScrollView];
+    if (![_containerView.subviews containsObject:_bottomScrollView]) {
+        [_containerView addSubview:_bottomScrollView];
     }
     
     [self invalidateLayout];
@@ -608,16 +630,16 @@ static CXAlertView *__cx_alert_current_view;
         }
     }
     
-    [self.oldKeyWindow makeKeyWindow];
-    self.oldKeyWindow.hidden = NO;
+    [_oldKeyWindow makeKeyWindow];
+    _oldKeyWindow.hidden = NO;
 }
 // Transition
 - (void)transitionInCompletion:(void(^)(void))completion
 {
-    self.containerView.alpha = 0;
+    _containerView.alpha = 0;
     [UIView animateWithDuration:0.3
                      animations:^{
-                         self.containerView.alpha = 1;
+                         _containerView.alpha = 1;
                      }
                      completion:^(BOOL finished) {
                          if (completion) {
@@ -630,7 +652,7 @@ static CXAlertView *__cx_alert_current_view;
 {
     [UIView animateWithDuration:0.25
                      animations:^{
-                         self.containerView.alpha = 0;
+                         _containerView.alpha = 0;
                      }
                      completion:^(BOOL finished) {
                          if (completion) {
@@ -683,7 +705,7 @@ static CXAlertView *__cx_alert_current_view;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem
 {
     if (buttonItem.action) {
-        buttonItem.action(self);
+        buttonItem.action(self,buttonItem);
     }
 }
 

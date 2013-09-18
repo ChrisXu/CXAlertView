@@ -7,16 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
-typedef NS_ENUM(NSInteger, CXAlertViewButtonType) {
-    CXAlertViewButtonTypeDefault = 0,
-    CXAlertViewButtonTypeDestructive = 1,
-    CXAlertViewButtonTypeCancel = 2
-};
+#import "CXAlertButtonItem.h"
 
 @class CXAlertView;
 typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
-
 @interface CXAlertView : UIView
 
 @property (nonatomic, copy) NSString *title;
@@ -40,11 +34,20 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @property (nonatomic, assign) CGFloat cornerRadius NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR; // default is 2.0
 @property (nonatomic, assign) CGFloat shadowRadius NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR; // default is 8.0
 
+@property (nonatomic, assign) CGFloat scrollViewPadding;
+@property (nonatomic, assign) CGFloat buttonHeight;
+@property (nonatomic, assign) CGFloat containerWidth;
+@property (nonatomic, assign) CGFloat vericalPadding;
+@property (nonatomic, assign) CGFloat topScrollViewMaxHeight;
+@property (nonatomic, assign) CGFloat topScrollViewMinHeight;
+@property (nonatomic, assign) CGFloat contentScrollViewMaxHeight;
+@property (nonatomic, assign) CGFloat contentScrollViewMinHeight;
+@property (nonatomic, assign) CGFloat bottomScrollViewHeight;
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message;
 - (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView;
 // Buttons
-- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertViewHandler)handler;
+- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler;
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
 - (void)setCancelButtonImage:(UIImage *)cancelButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
 - (void)setDestructiveButtonImage:(UIImage *)destructiveButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;

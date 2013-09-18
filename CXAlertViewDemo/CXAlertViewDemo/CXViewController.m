@@ -42,16 +42,15 @@
     [super viewDidAppear:animated];
     
     CXAlertView *alertView = [[CXAlertView alloc] initWithTitle:@"Steven Jobs" message:@"Steven Paul Jobs, the co-founder, two-time CEO, and chairman of Apple Inc., died October 5, 2011, after a long battle with cancer. He was 56. He was is survived by his wife and four children.The achievements in Jobs' career included helping to popularize the personal computer, leading the development of groundbreaking technology products including the Macintosh, iPod, and iPhone, and driving Pixar Animation Studios to prominence. Jobs’ charisma, drive for success and control, and vision contributed to revolutionary changes in the way technology integrates into and affects the daily life of most people in the world."];
-    
     [alertView addButtonWithTitle:@"Button1"
                              type:CXAlertViewButtonTypeDefault
-                          handler:^(CXAlertView *alertView) {
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                               NSLog(@"Button1 Clicked");
                               alertView.title = @"Steven Jobs";
                           }];
     [alertView addButtonWithTitle:@"Button2"
                              type:CXAlertViewButtonTypeCancel
-                          handler:^(CXAlertView *alertView) {
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                               NSLog(@"Button2 Clicked");
                               alertView.title = @"Steven Jobs \n Steven Jobs \n Steven Jobs";
                               UIView *view = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 500, 800)];
@@ -60,7 +59,7 @@
                           }];
     [alertView addButtonWithTitle:@"Button3"
                              type:CXAlertViewButtonTypeDestructive
-                          handler:^(CXAlertView *alertView) {
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                               NSLog(@"Button3 Clicked");
                               alertView.title = nil;
                               UIView *view = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 200, 200)];
@@ -70,7 +69,7 @@
     
     [alertView addButtonWithTitle:@"Dismiss"
                              type:CXAlertViewButtonTypeDestructive
-                          handler:^(CXAlertView *alertView) {
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                               NSLog(@"Dismiss");
                               [alertView dismiss];
                           }];
@@ -92,12 +91,13 @@
 }
 
 - (IBAction)showSquenceAlertView:(id)sender
-{
+{    
     CXAlertView *alertView1 = [[CXAlertView alloc] initWithTitle:@"Steven Jobs" message:@"Steven Paul Jobs, the co-founder, two-time CEO, and chairman of Apple Inc., died October 5, 2011, after a long battle with cancer. He was 56. He was is survived by his wife and four children.The achievements in Jobs' career included helping to popularize the personal computer, leading the development of groundbreaking technology products including the Macintosh, iPod, and iPhone, and driving Pixar Animation Studios to prominence. Jobs’ charisma, drive for success and control, and vision contributed to revolutionary changes in the way technology integrates into and affects the daily life of most people in the world."];
     
     [alertView1 addButtonWithTitle:@"OK"
                              type:CXAlertViewButtonTypeCancel
-                          handler:^(CXAlertView *alertView) {
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                              
                               [alertView dismiss];
                           }];
     
@@ -105,10 +105,16 @@
     
     CXAlertView *alertView2 = [[CXAlertView alloc] initWithTitle:@"pushviewcontroller style uiwindow" message:@"UINavigationController style in SingleViewApplication project ... bundle:nil]; [navigationController pushViewController:self.viewController ..."];
     
-    [alertView2 addButtonWithTitle:@"OK"
+    [alertView2 addButtonWithTitle:@"Confirm"
                              type:CXAlertViewButtonTypeDestructive
-                          handler:^(CXAlertView *alertView) {
-                              [alertView dismiss];
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                              button.enabled = NO;
+                              [button setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+                              [alertView addButtonWithTitle:@"OK"
+                                                        type:CXAlertViewButtonTypeDestructive
+                                                     handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                                                         [alertView dismiss];
+                                                     }];
                           }];
     
     [alertView2 show];

@@ -6,13 +6,23 @@
 //  Copyright (c) 2013年 ChrisXu. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "CXAlertView.h"
+#import <UIKit/UIKit.h>
+//#import "CXAlertView.h"
+typedef NS_ENUM(NSInteger, CXAlertViewButtonType) {
+    CXAlertViewButtonTypeDefault = 0,
+    CXAlertViewButtonTypeDestructive = 1,
+    CXAlertViewButtonTypeCancel = 2
+};
+
+@class CXAlertView;
+@class CXAlertButtonItem;
+typedef void(^CXAlertButtonHandler)(CXAlertView *alertView, CXAlertButtonItem *button);
 
 @interface CXAlertButtonItem : UIButton
 
+
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) CXAlertViewButtonType type;
-@property (nonatomic, copy) CXAlertViewHandler action;
+@property (nonatomic, copy) CXAlertButtonHandler action;
 
 @end
