@@ -180,20 +180,20 @@ static CXAlertView *__cx_alert_current_view;
         CGRect newFrame = firstButton.frame;
         newFrame.origin.x = 0;
         
-        CGFloat last_y = self.containerWidth/2 * [_buttons count];
-        
+        CGFloat last_x = self.containerWidth/2 * [_buttons count];
+        button.frame = CGRectMake( last_x + self.containerWidth/2, 0, self.containerWidth/2, self.buttonHeight);
         button.alpha = 0.;
         if (self.isVisible) {
             [UIView animateWithDuration:0.3 animations:^{
                 firstButton.frame = newFrame;
                 button.alpha = 1.;
-                button.frame = CGRectMake( last_y, 0, self.containerWidth/2, self.buttonHeight);
+                button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
             }];
         }
         else {
             firstButton.frame = newFrame;
             button.alpha = 1.;
-            button.frame = CGRectMake( last_y, 0, self.containerWidth/2, self.buttonHeight);
+            button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
         }
     }
     

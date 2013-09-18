@@ -103,7 +103,7 @@
     
     [alertView1 show];
     
-    CXAlertView *alertView2 = [[CXAlertView alloc] initWithTitle:@"pushviewcontroller style uiwindow" message:@"UINavigationController style in SingleViewApplication project ... bundle:nil]; [navigationController pushViewController:self.viewController ..."];
+    CXAlertView *alertView2 = [[CXAlertView alloc] initWithTitle:@"pushviewcontroller style uiwindow" message:@"UINavigationController style in SingleViewApplication project bundle:nil]; [navigationController pushViewController:self.viewController"];
     
     [alertView2 addButtonWithTitle:@"Confirm"
                              type:CXAlertViewButtonTypeDestructive

@@ -20,9 +20,9 @@
 		8357110017E18FDF004C8155 /* CXViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 835710FE17E18FDF004C8155 /* CXViewController.xib */; };
 		8357110917E1917D004C8155 /* CXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8357110817E1917D004C8155 /* CXAlertView.m */; };
 		8357116C17E1A745004C8155 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8357116B17E1A745004C8155 /* QuartzCore.framework */; };
-		8357117817E1BD28004C8155 /* CXAlertBackgroundWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8357117517E1BD28004C8155 /* CXAlertBackgroundWindow.m */; };
-		8357117917E1BD28004C8155 /* CXAlertButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8357117717E1BD28004C8155 /* CXAlertButtonItem.m */; };
-		8357117C17E1BE7F004C8155 /* CXAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8357117B17E1BE7F004C8155 /* CXAlertViewController.m */; };
+		83B3A84417E9B18D001BCBC6 /* CXAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B3A84317E9B18D001BCBC6 /* CXAlertViewController.m */; };
+		83B3A84717E9B19E001BCBC6 /* CXAlertBackgroundWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B3A84617E9B19E001BCBC6 /* CXAlertBackgroundWindow.m */; };
+		83B3A84A17E9B1A7001BCBC6 /* CXAlertButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B3A84917E9B1A7001BCBC6 /* CXAlertButtonItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,12 +45,12 @@
 		8357110717E1917D004C8155 /* CXAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertView.h; sourceTree = "<group>"; };
 		8357110817E1917D004C8155 /* CXAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertView.m; sourceTree = "<group>"; };
 		8357116B17E1A745004C8155 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		8357117417E1BD28004C8155 /* CXAlertBackgroundWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertBackgroundWindow.h; sourceTree = "<group>"; };
-		8357117517E1BD28004C8155 /* CXAlertBackgroundWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertBackgroundWindow.m; sourceTree = "<group>"; };
-		8357117617E1BD28004C8155 /* CXAlertButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertButtonItem.h; sourceTree = "<group>"; };
-		8357117717E1BD28004C8155 /* CXAlertButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertButtonItem.m; sourceTree = "<group>"; };
-		8357117A17E1BE7F004C8155 /* CXAlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertViewController.h; sourceTree = "<group>"; };
-		8357117B17E1BE7F004C8155 /* CXAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertViewController.m; sourceTree = "<group>"; };
+		83B3A84217E9B18D001BCBC6 /* CXAlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertViewController.h; sourceTree = "<group>"; };
+		83B3A84317E9B18D001BCBC6 /* CXAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertViewController.m; sourceTree = "<group>"; };
+		83B3A84517E9B19E001BCBC6 /* CXAlertBackgroundWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertBackgroundWindow.h; sourceTree = "<group>"; };
+		83B3A84617E9B19E001BCBC6 /* CXAlertBackgroundWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertBackgroundWindow.m; sourceTree = "<group>"; };
+		83B3A84817E9B1A7001BCBC6 /* CXAlertButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertButtonItem.h; sourceTree = "<group>"; };
+		83B3A84917E9B1A7001BCBC6 /* CXAlertButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertButtonItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,25 +127,17 @@
 		8357110617E18FFD004C8155 /* CXAlertView */ = {
 			isa = PBXGroup;
 			children = (
-				8357117317E1BD28004C8155 /* classes */,
+				83B3A84517E9B19E001BCBC6 /* CXAlertBackgroundWindow.h */,
+				83B3A84617E9B19E001BCBC6 /* CXAlertBackgroundWindow.m */,
+				83B3A84817E9B1A7001BCBC6 /* CXAlertButtonItem.h */,
+				83B3A84917E9B1A7001BCBC6 /* CXAlertButtonItem.m */,
+				83B3A84217E9B18D001BCBC6 /* CXAlertViewController.h */,
+				83B3A84317E9B18D001BCBC6 /* CXAlertViewController.m */,
 				8357110717E1917D004C8155 /* CXAlertView.h */,
 				8357110817E1917D004C8155 /* CXAlertView.m */,
 			);
 			name = CXAlertView;
 			path = ../../CXAlertView;
-			sourceTree = "<group>";
-		};
-		8357117317E1BD28004C8155 /* classes */ = {
-			isa = PBXGroup;
-			children = (
-				8357117417E1BD28004C8155 /* CXAlertBackgroundWindow.h */,
-				8357117517E1BD28004C8155 /* CXAlertBackgroundWindow.m */,
-				8357117617E1BD28004C8155 /* CXAlertButtonItem.h */,
-				8357117717E1BD28004C8155 /* CXAlertButtonItem.m */,
-				8357117A17E1BE7F004C8155 /* CXAlertViewController.h */,
-				8357117B17E1BE7F004C8155 /* CXAlertViewController.m */,
-			);
-			path = classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,9 +211,9 @@
 				835710F417E18FDF004C8155 /* CXAppDelegate.m in Sources */,
 				835710FD17E18FDF004C8155 /* CXViewController.m in Sources */,
 				8357110917E1917D004C8155 /* CXAlertView.m in Sources */,
-				8357117817E1BD28004C8155 /* CXAlertBackgroundWindow.m in Sources */,
-				8357117917E1BD28004C8155 /* CXAlertButtonItem.m in Sources */,
-				8357117C17E1BE7F004C8155 /* CXAlertViewController.m in Sources */,
+				83B3A84417E9B18D001BCBC6 /* CXAlertViewController.m in Sources */,
+				83B3A84717E9B19E001BCBC6 /* CXAlertBackgroundWindow.m in Sources */,
+				83B3A84A17E9B1A7001BCBC6 /* CXAlertButtonItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +301,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CXAlertViewDemo/CXAlertViewDemo-Prefix.pch";
 				INFOPLIST_FILE = "CXAlertViewDemo/CXAlertViewDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -320,6 +313,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CXAlertViewDemo/CXAlertViewDemo-Prefix.pch";
 				INFOPLIST_FILE = "CXAlertViewDemo/CXAlertViewDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
