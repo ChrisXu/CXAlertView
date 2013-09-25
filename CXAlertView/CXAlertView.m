@@ -87,6 +87,7 @@ static CXAlertView *__cx_alert_current_view;
 // Buttons
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem;
+- (void)setButtonImage:(UIImage *)image forState:(UIControlState)state andButtonType:(CXAlertViewButtonType)type;
 @end
 
 @implementation CXAlertView
@@ -171,7 +172,7 @@ static CXAlertView *__cx_alert_current_view;
         _contentScrollViewMinHeight = kDefaultContentScrollViewMinHeight;
         _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
         
-        _drawButtonLine = YES;
+        _shouldDrawButtonLine = YES;
     }
     return self;
 }
@@ -182,7 +183,7 @@ static CXAlertView *__cx_alert_current_view;
     CXAlertButtonItem *button = [self buttonItemWithType:type];
     button.action = handler;
     button.type = type;
-    button.defaultRightLineVisible = _drawButtonLine;
+    button.defaultRightLineVisible = _shouldDrawButtonLine;
     [button setTitle:title forState:UIControlStateNormal];
     if ([_buttons count] == 0) {
         button.defaultRightLineVisible = NO;
@@ -191,7 +192,7 @@ static CXAlertView *__cx_alert_current_view;
     else {
         // correct first button
         CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
-        firstButton.defaultRightLineVisible = YES;
+        firstButton.defaultRightLineVisible = _shouldDrawButtonLine;
         CGRect newFrame = firstButton.frame;
         newFrame.origin.x = 0;
         [firstButton setNeedsDisplay];
@@ -221,17 +222,17 @@ static CXAlertView *__cx_alert_current_view;
 
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state
 {
-    
+    [self setButtonImage:defaultButtonImage forState:state andButtonType:CXAlertViewButtonTypeDefault];
 }
 
 - (void)setCancelButtonImage:(UIImage *)cancelButtonImage forState:(UIControlState)state
 {
-    
+    [self setButtonImage:cancelButtonImage forState:state andButtonType:CXAlertViewButtonTypeCancel];
 }
 
 - (void)setCustomButtonImage:(UIImage *)customButtonImage forState:(UIControlState)state
 {
-    
+    [self setButtonImage:customButtonImage forState:state andButtonType:CXAlertViewButtonTypeCustom];
 }
 // AlertView action
 - (void)show
@@ -483,7 +484,7 @@ static CXAlertView *__cx_alert_current_view;
     
     if (!_bottomScrollView) {
         _bottomScrollView = [[CXAlertButtonContainerView alloc] init];
-        _bottomScrollView.defaultTopLineVisible = _drawButtonLine;
+        _bottomScrollView.defaultTopLineVisible = _shouldDrawButtonLine;
     }
 }
 
@@ -726,6 +727,16 @@ static CXAlertView *__cx_alert_current_view;
     }
 }
 
+- (void)setButtonImage:(UIImage *)image forState:(UIControlState)state andButtonType:(CXAlertViewButtonType)type
+{
+    for (CXAlertButtonItem *button in _buttons)
+    {
+        if(button.type == type)
+        {
+            [button setBackgroundImage:image forState:state];
+        }
+    }
+}
 #pragma mark - Setter
 - (void)setTitle:(NSString *)title
 {
@@ -846,4 +857,5 @@ static CXAlertView *__cx_alert_current_view;
         }
     }
 }
+
 @end

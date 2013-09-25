@@ -94,7 +94,8 @@
 - (IBAction)showSquenceAlertView:(id)sender
 {    
     CXAlertView *alertView1 = [[CXAlertView alloc] initWithTitle:@"Chris Xu" contentView:self.myInfoView];
-    alertView1.drawButtonLine = NO;
+    alertView1.shouldDrawButtonLine = NO;
+    
     [alertView1 addButtonWithTitle:@"OK"
                              type:CXAlertViewButtonTypeCancel
                           handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
