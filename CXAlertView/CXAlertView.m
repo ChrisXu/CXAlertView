@@ -105,7 +105,7 @@ static CXAlertView *__cx_alert_current_view;
         appearance.buttonFont = [UIFont systemFontOfSize:[UIFont buttonFontSize]];
         appearance.buttonColor = [UIColor colorWithWhite:0.4 alpha:1];
         appearance.cancelButtonColor = [UIColor colorWithWhite:0.3 alpha:1];
-        appearance.destructiveButtonColor = [UIColor whiteColor];
+        appearance.customButtonColor = [UIColor whiteColor];
         appearance.cornerRadius = 2;
         appearance.shadowRadius = 8;
     });
@@ -229,7 +229,7 @@ static CXAlertView *__cx_alert_current_view;
     
 }
 
-- (void)setDestructiveButtonImage:(UIImage *)destructiveButtonImage forState:(UIControlState)state
+- (void)setCustomButtonImage:(UIImage *)customButtonImage forState:(UIControlState)state
 {
     
 }
@@ -694,21 +694,15 @@ static CXAlertView *__cx_alert_current_view;
 	UIImage *highlightedImage = nil;
 	switch (type) {
 		case CXAlertViewButtonTypeCancel:
-			normalImage = [UIImage imageNamed:@"SIAlertView.bundle/button-cancel"];
-			highlightedImage = [UIImage imageNamed:@"SIAlertView.bundle/button-cancel-d"];
 			[button setTitleColor:self.cancelButtonColor forState:UIControlStateNormal];
             [button setTitleColor:[self.cancelButtonColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
 			break;
-		case CXAlertViewButtonTypeDestructive:
-			normalImage = [UIImage imageNamed:@"SIAlertView.bundle/button-destructive"];
-			highlightedImage = [UIImage imageNamed:@"SIAlertView.bundle/button-destructive-d"];
-            [button setTitleColor:self.destructiveButtonColor forState:UIControlStateNormal];
-            [button setTitleColor:[self.destructiveButtonColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
+		case CXAlertViewButtonTypeCustom:
+            [button setTitleColor:self.customButtonColor forState:UIControlStateNormal];
+            [button setTitleColor:[self.customButtonColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
 			break;
 		case CXAlertViewButtonTypeDefault:
 		default:
-			normalImage = [UIImage imageNamed:@"SIAlertView.bundle/button-default"];
-			highlightedImage = [UIImage imageNamed:@"SIAlertView.bundle/button-default-d"];
 			[button setTitleColor:self.buttonColor forState:UIControlStateNormal];
             [button setTitleColor:[self.buttonColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
 			break;
@@ -835,13 +829,13 @@ static CXAlertView *__cx_alert_current_view;
     [self setColor:buttonColor toButtonsOfType:CXAlertViewButtonTypeCancel];
 }
 
-- (void)setDestructiveButtonColor:(UIColor *)buttonColor
+- (void)setCustomButtonColor:(UIColor *)buttonColor
 {
-    if (_destructiveButtonColor == buttonColor) {
+    if (_customButtonColor == buttonColor) {
         return;
     }
-    _destructiveButtonColor = buttonColor;
-    [self setColor:buttonColor toButtonsOfType:CXAlertViewButtonTypeDestructive];
+    _customButtonColor = buttonColor;
+    [self setColor:buttonColor toButtonsOfType:CXAlertViewButtonTypeCustom];
 }
 
 -(void)setColor:(UIColor *)color toButtonsOfType:(CXAlertViewButtonType)type {

@@ -32,7 +32,7 @@
 //    [[CXAlertView appearance] setViewBackgroundColor:[UIColor colorWithRed:0.922 green:0.925 blue:0.949 alpha:1.000]];
     [[CXAlertView appearance] setButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
     [[CXAlertView appearance] setCancelButtonColor:[UIColor colorWithRed:0.047 green:0.337 blue:1.000 alpha:1.000]];
-    [[CXAlertView appearance] setDestructiveButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
+    [[CXAlertView appearance] setCustomButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,7 +61,7 @@
                           }];
     
     [alertView addButtonWithTitle:@"Multititle"
-                             type:CXAlertViewButtonTypeDestructive
+                             type:CXAlertViewButtonTypeCustom
                           handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                               alertView.title = @"Line1 \n Line2 \n Line3";
                           }];
@@ -104,15 +104,15 @@
     
     [alertView1 show];
     
-    CXAlertView *alertView2 = [[CXAlertView alloc] initWithTitle:@"Agreement" message:@"UINavigationController style in SingleViewApplication project bundle:nil]; [navigationController pushViewController:self.viewController"];
+    CXAlertView *alertView2 = [[CXAlertView alloc] initWithTitle:@"MIT License" message:@"Copyright (c) 2013 Chris Xu, Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php) \n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED ‘AS IS’, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."];
     
     [alertView2 addButtonWithTitle:@"Confirm"
-                             type:CXAlertViewButtonTypeDestructive
+                             type:CXAlertViewButtonTypeDefault
                           handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                               button.enabled = NO;
                               [button setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
                               [alertView addButtonWithTitle:@"OK"
-                                                        type:CXAlertViewButtonTypeDestructive
+                                                        type:CXAlertViewButtonTypeDefault
                                                      handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                                                          [alertView dismiss];
                                                      }];

@@ -10,7 +10,7 @@
 //#import "CXAlertView.h"
 typedef NS_ENUM(NSInteger, CXAlertViewButtonType) {
     CXAlertViewButtonTypeDefault = 0,
-    CXAlertViewButtonTypeDestructive = 1,
+    CXAlertViewButtonTypeCustom = 1,
     CXAlertViewButtonTypeCancel = 2
 };
 
