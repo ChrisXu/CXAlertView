@@ -43,6 +43,8 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @property (nonatomic, assign) CGFloat contentScrollViewMaxHeight;
 @property (nonatomic, assign) CGFloat contentScrollViewMinHeight;
 @property (nonatomic, assign) CGFloat bottomScrollViewHeight;
+
+@property (nonatomic) BOOL drawButtonLine;
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message;
 - (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView;

@@ -3,10 +3,12 @@ CXAlertView
 
 Custom alertView which allow you to add view as main content.
 
+---
+![ScreenShot 1](screenshot1.png), ![ScreenShot 2](screenshot2.png),
 
 ##Installation
 ---
-* ~~CocoaPods add `pod 'CXPhotoBrowser'`~~ Appling
+* CocoaPods add `pod 'CXAlertView'`
 
 
 ##How to use

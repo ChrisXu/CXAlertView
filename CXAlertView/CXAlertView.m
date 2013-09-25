@@ -10,6 +10,7 @@
 #import "CXAlertBackgroundWindow.h"
 #import "CXAlertButtonItem.h"
 #import "CXAlertViewController.h"
+#import "CXAlertButtonContainerView.h"
 #import <QuartzCore/QuartzCore.h>
 
 static CGFloat const kDefaultScrollViewPadding = 10.;
@@ -43,7 +44,7 @@ static CXAlertView *__cx_alert_current_view;
 
 @property (nonatomic, strong) UIScrollView *topScrollView;
 @property (nonatomic, strong) UIScrollView *contentScrollView;
-@property (nonatomic, strong) UIScrollView *bottomScrollView;
+@property (nonatomic, strong) CXAlertButtonContainerView *bottomScrollView;
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIView *containerView;
@@ -61,7 +62,7 @@ static CXAlertView *__cx_alert_current_view;
 + (void)showBackground;
 + (void)hideBackgroundAnimated:(BOOL)animated;
 // Height
-- (CGFloat)heightOfLabelWithText:(NSString *)text font:(UIFont *)font;
+- (CGFloat)heightWithText:(NSString *)text font:(UIFont *)font;
 - (CGFloat)preferredHeight;
 - (CGFloat)heightForTopScrollView;
 - (CGFloat)heightForContentScrollView;
@@ -137,8 +138,17 @@ static CXAlertView *__cx_alert_current_view;
     messageLabel.font = [UIFont systemFontOfSize:18.0];
     messageLabel.textColor = [UIColor blackColor];
     messageLabel.numberOfLines = 0;
+    messageLabel.lineBreakMode = UILineBreakModeTailTruncation;
     messageLabel.text = message;
-    messageLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightOfLabelWithText:message font:messageLabel.font]);
+    messageLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:message font:messageLabel.font]);
+    
+    UITextView *messageTextView = [[UITextView alloc] init];
+    messageTextView.textAlignment = NSTextAlignmentLeft;
+    messageLabel.backgroundColor = [UIColor clearColor];
+    messageTextView.font = [UIFont systemFontOfSize:18.0];
+    messageTextView.text = message;
+    messageTextView.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:message font:messageLabel.font]);
+    
     
     return  [self initWithTitle:title contentView:messageLabel];
 }
@@ -160,6 +170,8 @@ static CXAlertView *__cx_alert_current_view;
         _contentScrollViewMaxHeight = kDefaultContentScrollViewMaxHeight;
         _contentScrollViewMinHeight = kDefaultContentScrollViewMinHeight;
         _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
+        
+        _drawButtonLine = YES;
     }
     return self;
 }
@@ -170,15 +182,19 @@ static CXAlertView *__cx_alert_current_view;
     CXAlertButtonItem *button = [self buttonItemWithType:type];
     button.action = handler;
     button.type = type;
+    button.defaultRightLineVisible = _drawButtonLine;
     [button setTitle:title forState:UIControlStateNormal];
     if ([_buttons count] == 0) {
+        button.defaultRightLineVisible = NO;
         button.frame = CGRectMake( self.containerWidth/4, 0, self.containerWidth/2, self.buttonHeight);
     }
     else {
         // correct first button
         CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
+        firstButton.defaultRightLineVisible = YES;
         CGRect newFrame = firstButton.frame;
         newFrame.origin.x = 0;
+        [firstButton setNeedsDisplay];
         
         CGFloat last_x = self.containerWidth/2 * [_buttons count];
         button.frame = CGRectMake( last_x + self.containerWidth/2, 0, self.containerWidth/2, self.buttonHeight);
@@ -350,7 +366,7 @@ static CXAlertView *__cx_alert_current_view;
                      }];
 }
 
-- (CGFloat)heightOfLabelWithText:(NSString *)text font:(UIFont *)font
+- (CGFloat)heightWithText:(NSString *)text font:(UIFont *)font
 {
     if (text) {
         CGSize size = [text sizeWithFont:font constrainedToSize:CGSizeMake(self.containerWidth - 2*self.vericalPadding - 1, NSUIntegerMax)];
@@ -445,11 +461,14 @@ static CXAlertView *__cx_alert_current_view;
     _containerView = [[UIView alloc] initWithFrame:self.bounds];
     [self addSubview:self.containerView];
     
+    _containerView.clipsToBounds = YES;
+    
     _containerView.backgroundColor = _viewBackgroundColor ? _viewBackgroundColor : [UIColor whiteColor];
     _containerView.layer.cornerRadius = self.cornerRadius;
     _containerView.layer.shadowOffset = CGSizeZero;
     _containerView.layer.shadowRadius = self.shadowRadius;
     _containerView.layer.shadowOpacity = 0.5;
+    
 }
 
 - (void)setupScrollViews
@@ -463,7 +482,8 @@ static CXAlertView *__cx_alert_current_view;
     }
     
     if (!_bottomScrollView) {
-        _bottomScrollView = [[UIScrollView alloc] init];
+        _bottomScrollView = [[CXAlertButtonContainerView alloc] init];
+        _bottomScrollView.defaultTopLineVisible = _drawButtonLine;
     }
 }
 
@@ -485,7 +505,7 @@ static CXAlertView *__cx_alert_current_view;
 #else
         _titleLabel.minimumFontSize = self.titleLabel.font.pointSize * 0.75;
 #endif
-        _titleLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightOfLabelWithText:self.title font:_titleLabel.font]);
+        _titleLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:self.title font:_titleLabel.font]);
         _titleLabel.text = self.title;
         
         _topScrollView.frame = CGRectMake( 0 , self.scrollViewPadding, self.containerWidth, [self heightForTopScrollView]);
@@ -637,9 +657,11 @@ static CXAlertView *__cx_alert_current_view;
 - (void)transitionInCompletion:(void(^)(void))completion
 {
     _containerView.alpha = 0;
+    _containerView.transform = CGAffineTransformMakeScale(1.2, 1.2);
     [UIView animateWithDuration:0.3
                      animations:^{
                          _containerView.alpha = 1;
+                         _containerView.transform = CGAffineTransformMakeScale(1.0,1.0);
                      }
                      completion:^(BOOL finished) {
                          if (completion) {
@@ -653,6 +675,7 @@ static CXAlertView *__cx_alert_current_view;
     [UIView animateWithDuration:0.25
                      animations:^{
                          _containerView.alpha = 0;
+                         _containerView.transform = CGAffineTransformMakeScale(0.9,0.9);
                      }
                      completion:^(BOOL finished) {
                          if (completion) {
