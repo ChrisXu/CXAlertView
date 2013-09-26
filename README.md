@@ -1,6 +1,8 @@
 CXAlertView
 ===========
 
+Version 1.0.0
+
 Custom alertㄒiew which allow you to add view as main content.
 
 ---
@@ -16,8 +18,8 @@ Custom alertㄒiew which allow you to add view as main content.
 
 ```Objective-C
 // Create
-- (id)initWithTitle:(NSString *)title message:(NSString *)message;
-- (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView;
+- (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle;
+- (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView cancelButtonTitle:(NSString *)cancelButtonTitle;
 // Buttons
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertViewHandler)handler;
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
