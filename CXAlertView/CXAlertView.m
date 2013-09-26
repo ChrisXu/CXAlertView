@@ -86,9 +86,11 @@ static CXAlertView *__cx_alert_current_view;
 - (void)transitionOutCompletion:(void(^)(void))completion;
 
 // Buttons
-- (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type;
+- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font;
+- (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem;
 - (void)setButtonImage:(UIImage *)image forState:(UIControlState)state andButtonType:(CXAlertViewButtonType)type;
+- (void)updateAllButtonsFont;
 @end
 
 @implementation CXAlertView
@@ -105,10 +107,12 @@ static CXAlertView *__cx_alert_current_view;
         appearance.titleColor = [UIColor blackColor];
         appearance.titleFont = [UIFont boldSystemFontOfSize:20];
         appearance.buttonFont = [UIFont systemFontOfSize:[UIFont buttonFontSize]];
-        appearance.buttonColor = [UIColor colorWithWhite:0.4 alpha:1];
-        appearance.cancelButtonColor = [UIColor colorWithWhite:0.3 alpha:1];
-        appearance.customButtonColor = [UIColor whiteColor];
-        appearance.cornerRadius = 2;
+        appearance.buttonColor = [UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f];
+        appearance.cancelButtonColor = [UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f];
+        appearance.cancelButtonFont = [UIFont boldSystemFontOfSize:18.];
+        appearance.customButtonColor = [UIColor colorWithRed:0.075f green:0.6f blue:0.9f alpha:1.0f];
+        appearance.customButtonFont = [UIFont systemFontOfSize:18.];
+        appearance.cornerRadius = 12;
         appearance.shadowRadius = 8;
     });
 }
@@ -178,44 +182,20 @@ static CXAlertView *__cx_alert_current_view;
 // Buttons
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler
 {
-    CXAlertButtonItem *button = [self buttonItemWithType:type];
-    button.action = handler;
-    button.type = type;
-    button.defaultRightLineVisible = _shouldDrawButtonLine;
-    [button setTitle:title forState:UIControlStateNormal];
-    if ([_buttons count] == 0) {
-        button.defaultRightLineVisible = NO;
-        button.frame = CGRectMake( self.containerWidth/4, 0, self.containerWidth/2, self.buttonHeight);
-    }
-    else {
-        // correct first button
-        CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
-        firstButton.defaultRightLineVisible = _shouldDrawButtonLine;
-        CGRect newFrame = firstButton.frame;
-        newFrame.origin.x = 0;
-        [firstButton setNeedsDisplay];
-        
-        CGFloat last_x = self.containerWidth/2 * [_buttons count];
-        button.frame = CGRectMake( last_x + self.containerWidth/2, 0, self.containerWidth/2, self.buttonHeight);
-        button.alpha = 0.;
-        if (self.isVisible) {
-            [UIView animateWithDuration:0.3 animations:^{
-                firstButton.frame = newFrame;
-                button.alpha = 1.;
-                button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
-            }];
-        }
-        else {
-            firstButton.frame = newFrame;
-            button.alpha = 1.;
-            button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
-        }
-    }
-    
-    [_buttons addObject:button];
-    [_bottomScrollView addSubview:button];
-    CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
-    _bottomScrollView.contentSize = CGSizeMake( newContentWidth, self.buttonHeight);
+    UIFont *font = nil;
+    switch (type) {
+		case CXAlertViewButtonTypeCancel:
+			font = self.cancelButtonFont;
+			break;
+		case CXAlertViewButtonTypeCustom:
+            font = self.customButtonFont;
+			break;
+		case CXAlertViewButtonTypeDefault:
+		default:
+			font = self.buttonFont;
+			break;
+	}
+    [self addButtonWithTitle:title type:type handler:handler font:font];
 }
 
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state
@@ -684,11 +664,53 @@ static CXAlertView *__cx_alert_current_view;
 }
 
 // Buttons
-- (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type
+- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
+{
+    CXAlertButtonItem *button = [self buttonItemWithType:type font:font];
+    button.action = handler;
+    button.type = type;
+    button.defaultRightLineVisible = _shouldDrawButtonLine;
+    [button setTitle:title forState:UIControlStateNormal];
+    if ([_buttons count] == 0) {
+        button.defaultRightLineVisible = NO;
+        button.frame = CGRectMake( self.containerWidth/4, 0, self.containerWidth/2, self.buttonHeight);
+    }
+    else {
+        // correct first button
+        CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
+        firstButton.defaultRightLineVisible = _shouldDrawButtonLine;
+        CGRect newFrame = firstButton.frame;
+        newFrame.origin.x = 0;
+        [firstButton setNeedsDisplay];
+        
+        CGFloat last_x = self.containerWidth/2 * [_buttons count];
+        button.frame = CGRectMake( last_x + self.containerWidth/2, 0, self.containerWidth/2, self.buttonHeight);
+        button.alpha = 0.;
+        if (self.isVisible) {
+            [UIView animateWithDuration:0.3 animations:^{
+                firstButton.frame = newFrame;
+                button.alpha = 1.;
+                button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
+            }];
+        }
+        else {
+            firstButton.frame = newFrame;
+            button.alpha = 1.;
+            button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
+        }
+    }
+    
+    [_buttons addObject:button];
+    [_bottomScrollView addSubview:button];
+    CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
+    _bottomScrollView.contentSize = CGSizeMake( newContentWidth, self.buttonHeight);
+}
+
+- (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font
 {
 	CXAlertButtonItem *button = [CXAlertButtonItem buttonWithType:UIButtonTypeCustom];
 //	button.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    button.titleLabel.font = self.buttonFont;
+    button.titleLabel.font = font;
 	UIImage *normalImage = nil;
 	UIImage *highlightedImage = nil;
 	switch (type) {
@@ -732,6 +754,24 @@ static CXAlertView *__cx_alert_current_view;
         if(button.type == type)
         {
             [button setBackgroundImage:image forState:state];
+        }
+    }
+}
+
+- (void)updateAllButtonsFont
+{
+    for (CXAlertButtonItem *button in _buttons) {
+        switch (button.type) {
+            case CXAlertViewButtonTypeCancel:
+                button.titleLabel.font = self.cancelButtonFont;
+                break;
+            case CXAlertViewButtonTypeCustom:
+                button.titleLabel.font = self.customButtonFont;
+                break;
+            case CXAlertViewButtonTypeDefault:
+            default:
+                button.titleLabel.font = self.buttonFont;
+                break;
         }
     }
 }
@@ -797,9 +837,7 @@ static CXAlertView *__cx_alert_current_view;
         return;
     }
     _buttonFont = buttonFont;
-    for (UIButton *button in self.buttons) {
-        button.titleLabel.font = buttonFont;
-    }
+    [self updateAllButtonsFont];
 }
 
 - (void)setCornerRadius:(CGFloat)cornerRadius
@@ -838,6 +876,15 @@ static CXAlertView *__cx_alert_current_view;
     [self setColor:buttonColor toButtonsOfType:CXAlertViewButtonTypeCancel];
 }
 
+- (void)setCancelButtonFont:(UIFont *)cancelButtonFont
+{
+    if (_cancelButtonFont == cancelButtonFont) {
+        return;
+    }
+    _cancelButtonFont = cancelButtonFont;
+    [self updateAllButtonsFont];
+}
+
 - (void)setCustomButtonColor:(UIColor *)buttonColor
 {
     if (_customButtonColor == buttonColor) {
@@ -845,6 +892,15 @@ static CXAlertView *__cx_alert_current_view;
     }
     _customButtonColor = buttonColor;
     [self setColor:buttonColor toButtonsOfType:CXAlertViewButtonTypeCustom];
+}
+
+- (void)setCustomButtonFont:(UIColor *)customButtonFont
+{
+    if (_customButtonFont == customButtonFont) {
+        return;
+    }
+    _customButtonFont = customButtonFont;
+    [self updateAllButtonsFont];
 }
 
 -(void)setColor:(UIColor *)color toButtonsOfType:(CXAlertViewButtonType)type {
