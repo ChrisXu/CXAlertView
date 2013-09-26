@@ -35,7 +35,8 @@ static CXAlertView *__cx_alert_current_view;
 
 @interface CXAlertView ()
 {
-    BOOL updateAnimated;
+    BOOL _updateAnimated;
+    NSString *_cancelButtonTitle;
 }
 
 @property (nonatomic, strong) UIWindow *oldKeyWindow;
@@ -128,7 +129,7 @@ static CXAlertView *__cx_alert_current_view;
 }
 #pragma mark - CXAlertView PB
 // Create
-- (id)initWithTitle:(NSString *)title message:(NSString *)message
+- (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle
 {
     _vericalPadding = kDefaultVericalPadding;
     _containerWidth = kDefaultContainerWidth;
@@ -143,18 +144,10 @@ static CXAlertView *__cx_alert_current_view;
     messageLabel.text = message;
     messageLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:message font:messageLabel.font]);
     
-    UITextView *messageTextView = [[UITextView alloc] init];
-    messageTextView.textAlignment = NSTextAlignmentLeft;
-    messageLabel.backgroundColor = [UIColor clearColor];
-    messageTextView.font = [UIFont systemFontOfSize:18.0];
-    messageTextView.text = message;
-    messageTextView.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:message font:messageLabel.font]);
-    
-    
-    return  [self initWithTitle:title contentView:messageLabel];
+    return  [self initWithTitle:title contentView:messageLabel cancelButtonTitle:cancelButtonTitle];
 }
 
-- (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView
+- (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView cancelButtonTitle:(NSString *)cancelButtonTitle
 {
     self = [super init];
     if (self) {
@@ -173,13 +166,18 @@ static CXAlertView *__cx_alert_current_view;
         _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
         
         _shouldDrawButtonLine = YES;
+        [self setupScrollViews];
+        if (cancelButtonTitle) {
+            [self addButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                [alertView dismiss];
+            }];
+        }
     }
     return self;
 }
 // Buttons
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler
 {
-    [self setupScrollViews];
     CXAlertButtonItem *button = [self buttonItemWithType:type];
     button.action = handler;
     button.type = type;
@@ -434,8 +432,8 @@ static CXAlertView *__cx_alert_current_view;
     CGFloat left = (self.bounds.size.width - self.containerWidth) * 0.5;
     CGFloat top = (self.bounds.size.height - height) * 0.5;
     _containerView.transform = CGAffineTransformIdentity;
-    if (updateAnimated) {
-        updateAnimated = NO;
+    if (_updateAnimated) {
+        _updateAnimated = NO;
         [UIView animateWithDuration:0.3 animations:^{
             _containerView.frame = CGRectMake(left, top, self.containerWidth, height);
         }];
@@ -743,7 +741,7 @@ static CXAlertView *__cx_alert_current_view;
     if (_title != title) {
         _title = title;
         
-        updateAnimated = YES;
+        _updateAnimated = YES;
         [self updateTopScrollView];
         [self updateContentScrollView];
         [self updateBottomScrollView];
@@ -756,7 +754,7 @@ static CXAlertView *__cx_alert_current_view;
     if (_contentView != contentView) {
         _contentView = contentView;
         
-        updateAnimated = YES;
+        _updateAnimated = YES;
         [self updateContentScrollView];
         [self updateBottomScrollView];
         [self invalidateLayout];
