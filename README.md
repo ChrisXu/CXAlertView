@@ -1,10 +1,10 @@
 CXAlertView
 ===========
 
-Custom alertView which allow you to add view as main content.
+Custom alertㄒiew which allow you to add view as main content.
 
 ---
-![ScreenShot 1](screenshot1.png) ![ScreenShot 2](screenshot2.png)
+![ScreenShot 1](screenshot1.png), ![ScreenShot 2](screenshot2.png)
 
 ##Installation
 ---

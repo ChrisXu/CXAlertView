@@ -29,7 +29,6 @@
     [[CXAlertView appearance] setTitleColor:[UIColor blackColor]];
     [[CXAlertView appearance] setCornerRadius:12];
     [[CXAlertView appearance] setShadowRadius:20];
-//    [[CXAlertView appearance] setViewBackgroundColor:[UIColor colorWithRed:0.922 green:0.925 blue:0.949 alpha:1.000]];
     [[CXAlertView appearance] setButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
     [[CXAlertView appearance] setCancelButtonColor:[UIColor colorWithRed:0.047 green:0.337 blue:1.000 alpha:1.000]];
     [[CXAlertView appearance] setCustomButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
