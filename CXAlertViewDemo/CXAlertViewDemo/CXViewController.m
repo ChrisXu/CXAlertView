@@ -15,6 +15,10 @@
 
 - (IBAction)showSquenceAlertView:(id)sender;
 
+- (IBAction)showCXAlert:(id)sender;
+
+- (IBAction)showSystemAlert:(id)sender;
+
 - (IBAction)infoButtonAction:(UIButton *)button;
 
 @end
@@ -123,6 +127,20 @@
                                                          [alertView dismiss];
                                                      }];
                           }];
+    
+    [alertView show];
+}
+
+- (IBAction)showCXAlert:(id)sender
+{
+    CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:@"Chris Xu" message:@"Something about me...." cancelButtonTitle:@"OK"];
+    
+    [alertViewMe show];
+}
+
+- (IBAction)showSystemAlert:(id)sender
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Chris Xu" message:@"Something about me...." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     
     [alertView show];
 }

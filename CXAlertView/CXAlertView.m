@@ -112,7 +112,7 @@ static CXAlertView *__cx_alert_current_view;
         appearance.cancelButtonFont = [UIFont boldSystemFontOfSize:18.];
         appearance.customButtonColor = [UIColor colorWithRed:0.075f green:0.6f blue:0.9f alpha:1.0f];
         appearance.customButtonFont = [UIFont systemFontOfSize:18.];
-        appearance.cornerRadius = 12;
+        appearance.cornerRadius = 8;
         appearance.shadowRadius = 8;
     });
 }
@@ -141,7 +141,7 @@ static CXAlertView *__cx_alert_current_view;
     UILabel *messageLabel = [[UILabel alloc] init];
     messageLabel.textAlignment = NSTextAlignmentCenter;
     messageLabel.backgroundColor = [UIColor clearColor];
-    messageLabel.font = [UIFont systemFontOfSize:18.0];
+    messageLabel.font = [UIFont systemFontOfSize:14.0];
     messageLabel.textColor = [UIColor blackColor];
     messageLabel.numberOfLines = 0;
     messageLabel.lineBreakMode = UILineBreakModeTailTruncation;
