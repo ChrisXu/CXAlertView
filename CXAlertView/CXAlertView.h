@@ -44,7 +44,8 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @property (nonatomic, assign) CGFloat contentScrollViewMaxHeight;
 @property (nonatomic, assign) CGFloat contentScrollViewMinHeight;
 @property (nonatomic, assign) CGFloat bottomScrollViewHeight;
-@property (nonatomic, assign) BOOL shouldDrawButtonLine;
+@property (nonatomic, assign) BOOL showButtonLine;
+@property (nonatomic, assign) BOOL showBlurBackground;
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle;
 - (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView cancelButtonTitle:(NSString *)cancelButtonTitle;
@@ -58,5 +59,4 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 - (void)dismiss;
 // Operation
 - (void)cleanAllPenddingAlert;
-
 @end

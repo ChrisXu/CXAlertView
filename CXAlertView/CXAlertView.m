@@ -13,6 +13,8 @@
 #import "CXAlertButtonContainerView.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import "LFGlassView.h"
+
 static CGFloat const kDefaultScrollViewPadding = 10.;
 static CGFloat const kDefaultButtonHeight = 44.;
 static CGFloat const kDefaultContainerWidth = 280.;
@@ -49,6 +51,7 @@ static CXAlertView *__cx_alert_current_view;
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, strong) LFGlassView *blurView;
 
 @property (nonatomic, strong) NSMutableArray *buttons;
 
@@ -91,6 +94,8 @@ static CXAlertView *__cx_alert_current_view;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem;
 - (void)setButtonImage:(UIImage *)image forState:(UIControlState)state andButtonType:(CXAlertViewButtonType)type;
 - (void)updateAllButtonsFont;
+// Blur
+- (void)updateBlurBackground;
 @end
 
 @implementation CXAlertView
@@ -169,7 +174,8 @@ static CXAlertView *__cx_alert_current_view;
         _contentScrollViewMinHeight = kDefaultContentScrollViewMinHeight;
         _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
         
-        _shouldDrawButtonLine = YES;
+        _showButtonLine = YES;
+        _showBlurBackground = YES;
         [self setupScrollViews];
         if (cancelButtonTitle) {
             [self addButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
@@ -392,6 +398,7 @@ static CXAlertView *__cx_alert_current_view;
 - (void)tearDown
 {
     [self.containerView removeFromSuperview];
+    [self.blurView removeFromSuperview];
     
     [self.titleLabel removeFromSuperview];
     self.titleLabel = nil;
@@ -412,14 +419,17 @@ static CXAlertView *__cx_alert_current_view;
     CGFloat left = (self.bounds.size.width - self.containerWidth) * 0.5;
     CGFloat top = (self.bounds.size.height - height) * 0.5;
     _containerView.transform = CGAffineTransformIdentity;
+    _blurView.transform = CGAffineTransformIdentity;
     if (_updateAnimated) {
         _updateAnimated = NO;
         [UIView animateWithDuration:0.3 animations:^{
             _containerView.frame = CGRectMake(left, top, self.containerWidth, height);
+            _blurView.frame = CGRectMake(left, top, self.containerWidth, height);
         }];
     }
     else {
         _containerView.frame = CGRectMake(left, top, self.containerWidth, height);
+        _blurView.frame = CGRectMake(left, top, self.containerWidth, height);
     }
     _containerView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:_containerView.bounds cornerRadius:_containerView.layer.cornerRadius].CGPath;
 }
@@ -448,6 +458,7 @@ static CXAlertView *__cx_alert_current_view;
     _containerView.layer.shadowRadius = self.shadowRadius;
     _containerView.layer.shadowOpacity = 0.5;
     
+    [self updateBlurBackground];
 }
 
 - (void)setupScrollViews
@@ -462,7 +473,7 @@ static CXAlertView *__cx_alert_current_view;
     
     if (!_bottomScrollView) {
         _bottomScrollView = [[CXAlertButtonContainerView alloc] init];
-        _bottomScrollView.defaultTopLineVisible = _shouldDrawButtonLine;
+        _bottomScrollView.defaultTopLineVisible = _showButtonLine;
     }
 }
 
@@ -637,10 +648,17 @@ static CXAlertView *__cx_alert_current_view;
 {
     _containerView.alpha = 0;
     _containerView.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    
+    _blurView.alpha = 0;
+    _blurView.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    
     [UIView animateWithDuration:0.3
                      animations:^{
-                         _containerView.alpha = 1;
+                         _containerView.alpha = 1.;
                          _containerView.transform = CGAffineTransformMakeScale(1.0,1.0);
+                         
+                         _blurView.alpha = 1.;
+                         _blurView.transform = CGAffineTransformMakeScale(1.0,1.0);
                      }
                      completion:^(BOOL finished) {
                          if (completion) {
@@ -655,6 +673,9 @@ static CXAlertView *__cx_alert_current_view;
                      animations:^{
                          _containerView.alpha = 0;
                          _containerView.transform = CGAffineTransformMakeScale(0.9,0.9);
+                         
+                         _blurView.alpha = 0;
+                         _blurView.transform = CGAffineTransformMakeScale(0.9,0.9);
                      }
                      completion:^(BOOL finished) {
                          if (completion) {
@@ -669,7 +690,7 @@ static CXAlertView *__cx_alert_current_view;
     CXAlertButtonItem *button = [self buttonItemWithType:type font:font];
     button.action = handler;
     button.type = type;
-    button.defaultRightLineVisible = _shouldDrawButtonLine;
+    button.defaultRightLineVisible = _showButtonLine;
     [button setTitle:title forState:UIControlStateNormal];
     if ([_buttons count] == 0) {
         button.defaultRightLineVisible = NO;
@@ -678,7 +699,7 @@ static CXAlertView *__cx_alert_current_view;
     else {
         // correct first button
         CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
-        firstButton.defaultRightLineVisible = _shouldDrawButtonLine;
+        firstButton.defaultRightLineVisible = _showButtonLine;
         CGRect newFrame = firstButton.frame;
         newFrame.origin.x = 0;
         [firstButton setNeedsDisplay];
@@ -775,6 +796,27 @@ static CXAlertView *__cx_alert_current_view;
         }
     }
 }
+
+- (void)updateBlurBackground
+{
+    UIColor *containerBKGColor = _viewBackgroundColor ? _viewBackgroundColor : [UIColor whiteColor];
+    self.containerView.backgroundColor = [containerBKGColor colorWithAlphaComponent:_showBlurBackground ? 0.7 : 1.];;
+    
+    if (_showBlurBackground) {
+        if (self.blurView == nil) {
+            self.blurView = [[LFGlassView alloc] initWithFrame:self.containerView.frame];
+            self.blurView.clipsToBounds = YES;
+            self.blurView.layer.cornerRadius = self.cornerRadius;
+            self.blurView.blurRadius = 10.;
+            self.blurView.scaleFactor = 1.;
+            self.blurView.blurSuperView = self.oldKeyWindow.rootViewController.view;
+        }
+        
+        [self insertSubview:self.blurView belowSubview:self.containerView];
+    } else {
+        [self.blurView removeFromSuperview];
+    }
+}
 #pragma mark - Setter
 - (void)setTitle:(NSString *)title
 {
@@ -810,6 +852,7 @@ static CXAlertView *__cx_alert_current_view;
     }
     _viewBackgroundColor = viewBackgroundColor;
     self.containerView.backgroundColor = viewBackgroundColor;
+    [self updateBlurBackground];
 }
 
 - (void)setTitleFont:(UIFont *)titleFont
@@ -847,6 +890,7 @@ static CXAlertView *__cx_alert_current_view;
     }
     _cornerRadius = cornerRadius;
     self.containerView.layer.cornerRadius = cornerRadius;
+    self.blurView.layer.cornerRadius = cornerRadius;
 }
 
 - (void)setShadowRadius:(CGFloat)shadowRadius
@@ -894,7 +938,7 @@ static CXAlertView *__cx_alert_current_view;
     [self setColor:buttonColor toButtonsOfType:CXAlertViewButtonTypeCustom];
 }
 
-- (void)setCustomButtonFont:(UIColor *)customButtonFont
+- (void)setCustomButtonFont:(UIFont *)customButtonFont
 {
     if (_customButtonFont == customButtonFont) {
         return;
@@ -912,4 +956,12 @@ static CXAlertView *__cx_alert_current_view;
     }
 }
 
+- (void)setShowBlurBackground:(BOOL)showBlurBackground
+{
+    if (_showBlurBackground == showBlurBackground) {
+        return;
+    }
+    _showBlurBackground = showBlurBackground;
+    [self updateBlurBackground];
+}
 @end

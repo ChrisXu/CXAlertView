@@ -15,6 +15,8 @@
 
 - (IBAction)showSquenceAlertView:(id)sender;
 
+- (IBAction)showBlurAlert:(id)sender;
+
 - (IBAction)showCXAlert:(id)sender;
 
 - (IBAction)showSystemAlert:(id)sender;
@@ -50,8 +52,7 @@
     
     // Create alertView with the old fashioned way.
     CXAlertView *alertView = [[CXAlertView alloc] initWithTitle:@"Steven Jobs" message:@"\"Steven Paul Jobs, the co-founder, two-time CEO, and chairman of Apple Inc., died October 5, 2011, after a long battle with cancer. He was 56. He was is survived by his wife and four children.The achievements in Jobs' career included helping to popularize the personal computer, leading the development of groundbreaking technology products including the Macintosh, iPod, and iPhone, and driving Pixar Animation Studios to prominence. Jobs’ charisma, drive for success and control, and vision contributed to revolutionary changes in the way technology integrates into and affects the daily life of most people in the world.\" - Wikipedia" cancelButtonTitle:nil];
-    
-    // Add additional button as you like with block to handle UIControlEventTouchUpInside event. 
+    // Add additional button as you like with block to handle UIControlEventTouchUpInside event.
     [alertView addButtonWithTitle:@"Dismiss"
                              type:CXAlertViewButtonTypeCancel
                           handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
@@ -65,6 +66,7 @@
                           handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                               alertView.title = @"Taipei 101";
                               UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"taipei101.jpg"]];
+                              imageView.backgroundColor = [UIColor clearColor];
                               alertView.contentView = imageView;
                           }];
     
@@ -95,7 +97,7 @@
     
     // Ｔhe old fashioned way to show alertview.
     CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:@"Chris Xu" contentView:self.myInfoView cancelButtonTitle:@"Sure"];
-    alertViewMe.shouldDrawButtonLine = NO;
+    alertViewMe.showButtonLine = NO;
     
     [alertViewMe show];
     
@@ -126,6 +128,25 @@
                                                      handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
                                                          [alertView dismiss];
                                                      }];
+                          }];
+    
+    [alertView show];
+}
+
+- (IBAction)showBlurAlert:(id)sender
+{
+    CXAlertView *alertView = [[CXAlertView alloc] initWithTitle:@"Blur Background Trigger \n Test" message:nil cancelButtonTitle:@"Dismiss"];
+    
+    [alertView addButtonWithTitle:@"Disable"
+                             type:CXAlertViewButtonTypeCustom
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                              alertView.showBlurBackground = NO;
+                          }];
+    
+    [alertView addButtonWithTitle:@"Enable"
+                             type:CXAlertViewButtonTypeCustom
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                              alertView.showBlurBackground = YES;
                           }];
     
     [alertView show];

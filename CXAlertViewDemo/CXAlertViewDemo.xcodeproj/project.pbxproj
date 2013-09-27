@@ -26,6 +26,10 @@
 		83B3A84417E9B18D001BCBC6 /* CXAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B3A84317E9B18D001BCBC6 /* CXAlertViewController.m */; };
 		83B3A84717E9B19E001BCBC6 /* CXAlertBackgroundWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B3A84617E9B19E001BCBC6 /* CXAlertBackgroundWindow.m */; };
 		83B3A84A17E9B1A7001BCBC6 /* CXAlertButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B3A84917E9B1A7001BCBC6 /* CXAlertButtonItem.m */; };
+		83E10DD217F5398C00BC5D18 /* LFDisplayBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E10DCE17F5398C00BC5D18 /* LFDisplayBridge.m */; };
+		83E10DD317F5398C00BC5D18 /* LFGlassView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E10DD017F5398C00BC5D18 /* LFGlassView.m */; };
+		83E10DD517F53A5500BC5D18 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E10DD417F53A5500BC5D18 /* Accelerate.framework */; };
+		83E10DD717F549F400BC5D18 /* bkg2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83E10DD617F549F400BC5D18 /* bkg2.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +62,13 @@
 		83B3A84617E9B19E001BCBC6 /* CXAlertBackgroundWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertBackgroundWindow.m; sourceTree = "<group>"; };
 		83B3A84817E9B1A7001BCBC6 /* CXAlertButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertButtonItem.h; sourceTree = "<group>"; };
 		83B3A84917E9B1A7001BCBC6 /* CXAlertButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertButtonItem.m; sourceTree = "<group>"; };
+		83E10DCD17F5398C00BC5D18 /* LFDisplayBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFDisplayBridge.h; sourceTree = "<group>"; };
+		83E10DCE17F5398C00BC5D18 /* LFDisplayBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFDisplayBridge.m; sourceTree = "<group>"; };
+		83E10DCF17F5398C00BC5D18 /* LFGlassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFGlassView.h; sourceTree = "<group>"; };
+		83E10DD017F5398C00BC5D18 /* LFGlassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFGlassView.m; sourceTree = "<group>"; };
+		83E10DD117F5398C00BC5D18 /* LiveFrost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveFrost.h; sourceTree = "<group>"; };
+		83E10DD417F53A5500BC5D18 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		83E10DD617F549F400BC5D18 /* bkg2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bkg2.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83E10DD517F53A5500BC5D18 /* Accelerate.framework in Frameworks */,
 				8357116C17E1A745004C8155 /* QuartzCore.framework in Frameworks */,
 				835710E417E18FDF004C8155 /* UIKit.framework in Frameworks */,
 				835710E617E18FDF004C8155 /* Foundation.framework in Frameworks */,
@@ -95,6 +107,7 @@
 		835710E217E18FDF004C8155 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83E10DD417F53A5500BC5D18 /* Accelerate.framework */,
 				8357116B17E1A745004C8155 /* QuartzCore.framework */,
 				835710E317E18FDF004C8155 /* UIKit.framework */,
 				835710E517E18FDF004C8155 /* Foundation.framework */,
@@ -121,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				83AB028917F2C26E005E51C4 /* bkg.png */,
+				83E10DD617F549F400BC5D18 /* bkg2.jpg */,
 				83AB028B17F2C439005E51C4 /* taipei101.jpg */,
 				835710EB17E18FDF004C8155 /* CXAlertViewDemo-Info.plist */,
 				835710EC17E18FDF004C8155 /* InfoPlist.strings */,
@@ -136,6 +150,7 @@
 		8357110617E18FFD004C8155 /* CXAlertView */ = {
 			isa = PBXGroup;
 			children = (
+				83E10DCC17F5398C00BC5D18 /* LiveFrost */,
 				83B3A84517E9B19E001BCBC6 /* CXAlertBackgroundWindow.h */,
 				83B3A84617E9B19E001BCBC6 /* CXAlertBackgroundWindow.m */,
 				83B3A84817E9B1A7001BCBC6 /* CXAlertButtonItem.h */,
@@ -149,6 +164,18 @@
 			);
 			name = CXAlertView;
 			path = ../../CXAlertView;
+			sourceTree = "<group>";
+		};
+		83E10DCC17F5398C00BC5D18 /* LiveFrost */ = {
+			isa = PBXGroup;
+			children = (
+				83E10DCD17F5398C00BC5D18 /* LFDisplayBridge.h */,
+				83E10DCE17F5398C00BC5D18 /* LFDisplayBridge.m */,
+				83E10DCF17F5398C00BC5D18 /* LFGlassView.h */,
+				83E10DD017F5398C00BC5D18 /* LFGlassView.m */,
+				83E10DD117F5398C00BC5D18 /* LiveFrost.h */,
+			);
+			path = LiveFrost;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,6 +237,7 @@
 				8357110017E18FDF004C8155 /* CXViewController.xib in Resources */,
 				83AB028A17F2C26E005E51C4 /* bkg.png in Resources */,
 				83AB028C17F2C439005E51C4 /* taipei101.jpg in Resources */,
+				83E10DD717F549F400BC5D18 /* bkg2.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +256,8 @@
 				83B3A84717E9B19E001BCBC6 /* CXAlertBackgroundWindow.m in Sources */,
 				83B3A84A17E9B1A7001BCBC6 /* CXAlertButtonItem.m in Sources */,
 				83AB028817F2A551005E51C4 /* CXAlertButtonContainerView.m in Sources */,
+				83E10DD217F5398C00BC5D18 /* LFDisplayBridge.m in Sources */,
+				83E10DD317F5398C00BC5D18 /* LFGlassView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
