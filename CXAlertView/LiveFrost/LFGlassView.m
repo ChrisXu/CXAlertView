@@ -14,10 +14,10 @@
 
 @property (nonatomic, assign, readonly) uint32_t precalculatedBlurKernel;
 
-@property (nonatomic, assign, readwrite) BOOL needsImageBuffersRecreation;
-
 - (void) updatePrecalculatedBlurKernel;
+- (void) adjustImageBuffersForFrame:(CGRect)frame fromFrame:(CGRect)fromFrame;
 - (void) recreateImageBuffers;
+- (void) subscribeViewWithBounds:(CGRect)bounds;
 
 @end
 
@@ -42,7 +42,7 @@
 	self.clipsToBounds = YES;
 	self.layer.cornerRadius = 20.0f;
 	self.blurRadius = 4.0f;
-	self.scaleFactor = 1.f;
+	self.scaleFactor = 0.25f;
 	self.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.25f];
 	self.opaque = NO;
 	self.userInteractionEnabled = NO;
@@ -77,7 +77,7 @@
 	CGSize scaledSize = [self scaledSize];
 	if (!CGSizeEqualToSize(_bufferSize, scaledSize)) {
 		_bufferSize = scaledSize;
-		[self setNeedsImageBuffersRecreation];
+		[self recreateImageBuffers];
 	}
 }
 
@@ -92,40 +92,35 @@
 - (void) setFrame:(CGRect)frame {
 	CGRect fromFrame = self.frame;
 	[super setFrame:frame];
-	if (!CGRectEqualToRect(fromFrame, self.frame)) {
-		[self setNeedsImageBuffersRecreation];
-	}
+	[self adjustImageBuffersForFrame:self.frame fromFrame:fromFrame];
+	[self subscribeViewWithBounds:frame];
 }
 
 - (void) setBounds:(CGRect)bounds {
 	CGRect fromFrame = self.frame;
 	[super setBounds:bounds];
-	if (!CGRectEqualToRect(fromFrame, self.frame)) {
-		[self setNeedsImageBuffersRecreation];
-	}
+	[self adjustImageBuffersForFrame:self.frame fromFrame:fromFrame];
+	[self subscribeViewWithBounds:bounds];
 }
 
 - (void) setCenter:(CGPoint)center {
 	CGRect fromFrame = self.frame;
 	[super setCenter:center];
-	if (!CGRectEqualToRect(fromFrame, self.frame)) {
-		[self setNeedsImageBuffersRecreation];
+	[self adjustImageBuffersForFrame:self.frame fromFrame:fromFrame];
+}
+
+- (void) adjustImageBuffersForFrame:(CGRect)frame fromFrame:(CGRect)fromFrame {
+	if (CGRectEqualToRect(fromFrame, frame)) {
+		return;
 	}
-}
-
-- (void) setNeedsImageBuffersRecreation {
-	_needsImageBuffersRecreation = YES;
-}
-
-- (void) recreateImageBuffersIfNeeded {
-	if (_needsImageBuffersRecreation) {
-		[self recreateImageBuffers];
-	}
-}
-
-- (void) recreateImageBuffers {
-	_needsImageBuffersRecreation = NO;
 	
+	if (!CGRectIsEmpty(frame) && self.superview) {
+		[self recreateImageBuffers];
+		[self refresh];
+	}
+}
+
+- (void) recreateImageBuffers {	
 	CGRect visibleRect = self.frame;
 	CGSize bufferSize = self.scaledSize;
 	if (CGSizeEqualToSize(bufferSize, CGSizeZero)) {
@@ -171,34 +166,51 @@
 	};
 }
 
+- (void) subscribeViewWithBounds:(CGRect)bounds {
+	if (!CGRectIsEmpty(bounds) && self.superview) {
+		[[LFDisplayBridge sharedInstance] addSubscribedViewsObject:self];
+	} else {
+		[[LFDisplayBridge sharedInstance] removeSubscribedViewsObject:self];
+	}
+}
+
 - (void) didMoveToSuperview {
 	[super didMoveToSuperview];
-	[self recreateImageBuffers];
-	[self refresh];
-	[[LFDisplayBridge sharedInstance] addSubscribedViewsObject:self];
+	
+	if (!CGRectIsEmpty(self.bounds) && self.superview) {
+		[self recreateImageBuffers];
+		[self refresh];
+		[[LFDisplayBridge sharedInstance] addSubscribedViewsObject:self];
+	}
+}
+
+- (void) removeFromSuperview {
+	[[LFDisplayBridge sharedInstance] removeSubscribedViewsObject:self];
+	
+	[super removeFromSuperview];
 }
 
 - (void) refresh {
-    if (!self.blurSuperView) {
+#ifdef DEBUG
+    NSParameterAssert(self.superview);
+    NSParameterAssert(_effectInContext);
+    NSParameterAssert(_effectOutContext);
+#endif
+	
+	if (!self.blurSuperView) {
         self.blurSuperView = self.superview;
     }
     
-	if (!self.blurSuperView) {
-		return;
-	}
-	
-	[self recreateImageBuffersIfNeeded];
-		
-	CGContextRef effectInContext = _effectInContext;
-	CGContextRef effectOutContext = _effectOutContext;
-	vImage_Buffer effectInBuffer = _effectInBuffer;
-	vImage_Buffer effectOutBuffer = _effectOutBuffer;
-	
-	self.hidden = YES;
-	[self.blurSuperView.layer renderInContext:effectInContext];
-	self.hidden = NO;
-	
-	uint32_t blurKernel = _precalculatedBlurKernel;
+    CGContextRef effectInContext = _effectInContext;
+    CGContextRef effectOutContext = _effectOutContext;
+    vImage_Buffer effectInBuffer = _effectInBuffer;
+    vImage_Buffer effectOutBuffer = _effectOutBuffer;
+    
+    self.hidden = YES;
+    [self.blurSuperView.layer renderInContext:effectInContext];
+    self.hidden = NO;
+    
+    uint32_t blurKernel = _precalculatedBlurKernel;
 	
 	vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, NULL, 0, 0, blurKernel, blurKernel, 0, kvImageEdgeExtend);
 	vImageBoxConvolve_ARGB8888(&effectOutBuffer, &effectInBuffer, NULL, 0, 0, blurKernel, blurKernel, 0, kvImageEdgeExtend);
