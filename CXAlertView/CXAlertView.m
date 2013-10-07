@@ -149,9 +149,16 @@ static CXAlertView *__cx_alert_current_view;
     messageLabel.font = [UIFont systemFontOfSize:14.0];
     messageLabel.textColor = [UIColor blackColor];
     messageLabel.numberOfLines = 0;
-    messageLabel.lineBreakMode = UILineBreakModeTailTruncation;
     messageLabel.text = message;
     messageLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:message font:messageLabel.font]);
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] > 6.0) {
+        messageLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    }
+    else {
+        // deprecated in 6.0
+        messageLabel.lineBreakMode = UILineBreakModeTailTruncation;
+    }
     
     return  [self initWithTitle:title contentView:messageLabel cancelButtonTitle:cancelButtonTitle];
 }
