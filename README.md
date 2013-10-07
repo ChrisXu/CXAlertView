@@ -1,7 +1,7 @@
 CXAlertView
 ===========
 
-Version 1.0.0
+Version 1.0.1
 This is a custom alertview which allow you to add view as you like in iOS7.
 
 >You cannot customize the appearance of alert views.' - [iOS 7 Design Resources ](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/UIKitUICatalog/UIAlertView.html#//apple_ref/doc/uid/TP40012857-UIAlertView-SW1)
