@@ -152,13 +152,11 @@ static CXAlertView *__cx_alert_current_view;
     messageLabel.text = message;
     messageLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:message font:messageLabel.font]);
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] > 6.0) {
-        messageLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    }
-    else {
-        // deprecated in 6.0
-        messageLabel.lineBreakMode = UILineBreakModeTailTruncation;
-    }
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
+    messageLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+#else
+    messageLabel.lineBreakMode = UILineBreakModeTailTruncation;
+#endif
     
     return  [self initWithTitle:title contentView:messageLabel cancelButtonTitle:cancelButtonTitle];
 }
@@ -361,8 +359,15 @@ static CXAlertView *__cx_alert_current_view;
 - (CGFloat)heightWithText:(NSString *)text font:(UIFont *)font
 {
     if (text) {
-        CGSize size = [text sizeWithFont:font constrainedToSize:CGSizeMake(self.containerWidth - 2*self.vericalPadding - 1, NSUIntegerMax)];
-        
+        CGSize size = CGSizeZero;
+        CGSize rSize = CGSizeMake(self.containerWidth - 2*self.vericalPadding - 1, NSUIntegerMax);
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
+        NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys: font, NSFontAttributeName, nil];
+        CGRect rect = [text boundingRectWithSize:rSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        size = rect.size;
+#else
+        size = [text sizeWithFont:font constrainedToSize:rSize];
+#endif
         return size.height;
     }
     
