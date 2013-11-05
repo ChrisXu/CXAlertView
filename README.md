@@ -6,7 +6,7 @@ This is a custom alertview which allow you to add view as you like in iOS7.
 
 >You cannot customize the appearance of alert views.' - [iOS 7 Design Resources ](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/UIKitUICatalog/UIAlertView.html#//apple_ref/doc/uid/TP40012857-UIAlertView-SW1)
 
-If you ever try to mess up the UIAlertView, it was easy. Just try to add at least five butons on it. Therefore I change the way to layout of buttons. In this custom alertview, you can add  buttons as more as you like. Also you are able to change the appearance of it. 
+If you ever try to mess up with the UIAlertView, it is easy. Go to add at least five buttons on it. Therefore I change the layout with buttons. In this custom alertview, you can add buttons as more as you like. Also you are able to change the appearance of it.
 
 ---
 ![ScreenShot 1](screenshot1.png)-![ScreenShot 2](screenshot2.png)
@@ -48,6 +48,12 @@ If you ever try to mess up the UIAlertView, it was easy. Just try to add at leas
 ---
  * [SIAlertView](https://github.com/Sumi-Interactive/SIAlertView) for some tips to build this.
  * [LiveFrost](https://github.com/radi/LiveFrost) for blur background support.
+
+##Support
+---
+ * Xcode 5
+ * Framework : QuartzCore, Accelerate
+ * ARC
 
 ##Contact
 ---
