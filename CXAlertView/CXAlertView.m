@@ -700,6 +700,7 @@ static CXAlertView *__cx_alert_current_view;
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
 {
     CXAlertButtonItem *button = [self buttonItemWithType:type font:font];
+    button.title = title;
     button.action = handler;
     button.type = type;
     button.defaultRightLineVisible = _showButtonLine;
