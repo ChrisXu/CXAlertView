@@ -712,6 +712,7 @@ static CXAlertView *__cx_alert_current_view;
 {
     CXAlertButtonItem *button = [self buttonItemWithType:type font:font];
     
+    button.title = title;
     button.action = handler;
     button.type = type;
     button.defaultRightLineVisible = _showButtonLine;
