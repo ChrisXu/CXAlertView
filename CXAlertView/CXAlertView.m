@@ -53,8 +53,6 @@ static CXAlertView *__cx_alert_current_view;
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) LFGlassView *blurView;
 
-@property (nonatomic, strong) NSMutableArray *buttons;
-
 @property (nonatomic, assign, getter = isLayoutDirty) BOOL layoutDirty;
 
 + (NSMutableArray *)sharedQueue;
@@ -289,6 +287,19 @@ static CXAlertView *__cx_alert_current_view;
 - (void)dismiss
 {
     [self dismissWithCleanup:YES];
+}
+
+- (void)shake
+{
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+    animation.duration = 0.1;
+	animation.repeatCount = 3;
+    animation.autoreverses = YES;
+//    animation.fromValue = [NSNumber numberWithFloat:0.0];
+    animation.toValue = [NSNumber numberWithFloat:10.0];
+    [self.layer removeAllAnimations];
+    [self.layer addAnimation:animation forKey:@"transform.translation.x"];
+    
 }
 // Operation
 - (void)cleanAllPenddingAlert
@@ -700,6 +711,7 @@ static CXAlertView *__cx_alert_current_view;
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
 {
     CXAlertButtonItem *button = [self buttonItemWithType:type font:font];
+    
     button.action = handler;
     button.type = type;
     button.defaultRightLineVisible = _showButtonLine;

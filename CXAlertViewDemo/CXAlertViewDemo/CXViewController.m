@@ -87,6 +87,14 @@
                               alertView.contentView = view;
                           }];
     
+    [alertView addButtonWithTitle:@"Shake"
+                             type:CXAlertViewButtonTypeDefault
+                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                              
+                              [alertView shake];
+                              
+                          }];
+    
     // Remember to call this, or alertview will never be seen.
     [alertView show];
 }

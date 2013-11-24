@@ -15,6 +15,7 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) UIView *contentView;
+@property (nonatomic, strong, readonly) NSMutableArray *buttons;
 
 @property (nonatomic, copy) CXAlertViewHandler willShowHandler;
 @property (nonatomic, copy) CXAlertViewHandler didShowHandler;
@@ -57,6 +58,7 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 // AlertView action
 - (void)show;
 - (void)dismiss;
+- (void)shake;
 // Operation
 - (void)cleanAllPenddingAlert;
 @end
