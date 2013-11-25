@@ -10,6 +10,8 @@ If you ever try to mess up with the UIAlertView, it is easy. Go to add at least 
 
 ---
 ![ScreenShot 1](screenshot1.png)-![ScreenShot 2](screenshot2.png)
+---
+![Multilined Button Titles](screenshot-multilined-buttons.png)
 
 ##Installation
 

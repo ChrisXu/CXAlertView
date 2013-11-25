@@ -11,7 +11,7 @@
 
 
 #define defaultMessageTitle			@"Chris Xu"
-#define multiLinedMessageContent	@"This is an alert view developed by Chris Xu and enhanced by other contributors which allows you to serve following purposes \n\n - show ios7 styled alerts in ios 5 and 6 \n\n - fully customozable alertview with changable colors,radiuses,fonts..etc \n\n - multilined alert texts and button titles \n\n - much more to come"
+#define multiLinedMessageContent	@"This is an alert view developed by Chris Xu and enhanced by other contributors which allows you to serve following purposes \n\n - show ios7 styled alerts in ios 5 and 6 \n\n - multilined alert texts and button titles \n\n - fully customozable alertview with changable colors,radiuses,fonts..etc \n\n - much more to come"
 #define multiLineMessageCancelText		@"I dont understand clearly"
 #define multiLineMessageAcceptedText	@"I understood and accepting it"
 
