@@ -9,6 +9,13 @@
 #import "CXViewController.h"
 #import "CXAlertView.h"
 
+
+#define defaultMessageTitle			@"Chris Xu"
+#define multiLinedMessageContent	@"This is an alert view developed by Chris Xu and enhanced by other contributors which allows you to serve following purposes \n\n - show ios7 styled alerts in ios 5 and 6 \n\n - multilined alert texts and button titles \n\n - fully customozable alertview with changable colors,radiuses,fonts..etc \n\n - much more to come"
+#define multiLineMessageCancelText		@"I dont understand clearly"
+#define multiLineMessageAcceptedText	@"I understood and accepting it"
+
+
 @interface CXViewController ()
 
 @property (nonatomic, strong) IBOutlet UIView *myInfoView;
@@ -19,7 +26,11 @@
 
 - (IBAction)showCXAlert:(id)sender;
 
+- (IBAction)showMultiLinedCXAlert:(id)sender;
+
 - (IBAction)showSystemAlert:(id)sender;
+
+- (IBAction)showMultiLinedSystemAlert:(id)sender;
 
 - (IBAction)infoButtonAction:(UIButton *)button;
 
@@ -104,7 +115,7 @@
     // This is a demo for poping up two alertview.
     
     // Ｔhe old fashioned way to show alertview.
-    CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:@"Chris Xu" contentView:self.myInfoView cancelButtonTitle:@"Sure"];
+    CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:defaultMessageTitle contentView:self.myInfoView cancelButtonTitle:@"Sure"];
     alertViewMe.showButtonLine = NO;
     
     [alertViewMe show];
@@ -162,14 +173,44 @@
 
 - (IBAction)showCXAlert:(id)sender
 {
-    CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:@"Chris Xu" message:@"Something about me...." cancelButtonTitle:@"OK"];
+    CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:defaultMessageTitle message:@"Something about me...." cancelButtonTitle:@"OK"];
     
+    [alertViewMe show];
+}
+
+-(IBAction)showMultiLinedCXAlert:(id)sender
+{
+	CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:defaultMessageTitle message:multiLinedMessageContent cancelButtonTitle:nil];
+    
+	// This is a demo for multiple line of title.
+    [alertViewMe addButtonWithTitle:multiLineMessageAcceptedText
+							   type:CXAlertViewButtonTypeDefault
+							handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+								[alertView dismiss];
+							}];
+    
+    [alertViewMe addButtonWithTitle:multiLineMessageCancelText
+							   type:CXAlertViewButtonTypeCancel
+							handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+								[alertView dismiss];
+							}];
+	
     [alertViewMe show];
 }
 
 - (IBAction)showSystemAlert:(id)sender
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Chris Xu" message:@"Something about me...." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:defaultMessageTitle message:@"Something about me...." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    
+    [alertView show];
+}
+
+-(IBAction)showMultiLinedSystemAlert:(id)sender
+{
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:defaultMessageTitle message:multiLinedMessageContent delegate:nil cancelButtonTitle:nil otherButtonTitles: nil];
+	
+	[alertView addButtonWithTitle:multiLineMessageAcceptedText];
+	alertView.cancelButtonIndex=[alertView addButtonWithTitle:multiLineMessageCancelText];
     
     [alertView show];
 }

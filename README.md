@@ -2,14 +2,26 @@ CXAlertView
 ===========
 
 Version 1.0.1
-This is a custom alertview which allow you to add view as you like in iOS7.
 
 >You cannot customize the appearance of alert views.' - [iOS 7 Design Resources ](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/UIKitUICatalog/UIAlertView.html#//apple_ref/doc/uid/TP40012857-UIAlertView-SW1)
 
-If you ever try to mess up with the UIAlertView, it is easy. Go to add at least five buttons on it. Therefore I change the layout with buttons. In this custom alertview, you can add buttons as more as you like. Also you are able to change the appearance of it.
+If you ever try to mess up with the UIAlertView, it is easy. Go to add at least five buttons on it. Therefore We change the layout with buttons.
+
+This is a custom alert view developed by Chris Xu and enhanced by other contributors which allows you to following things
+ * Show ios7 styled alerts in ios 5 and 6.
+
+	![ScreenShot 2](screenshot2.png)
+ * Unlike iOS 6 and below , on IOS 7 is non-customisable i.e., you can't modify to customise it. This alert allows you to Add view as you like in iOS7.
+
+	![ScreenShot 1](screenshot1.png)
+
+ * Multilined alert texts and button titles.
+ 
+	![Multilined Button Titles](screenshot-multilined-buttons.png)
+ * Fully customizable alertview with interchangable colors,radiuses,fonts..etc.
 
 ---
-![ScreenShot 1](screenshot1.png)-![ScreenShot 2](screenshot2.png)
+
 
 ##Installation
 
