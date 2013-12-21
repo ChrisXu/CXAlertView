@@ -14,6 +14,9 @@ This is a custom alert view developed by Chris Xu and enhanced by other contribu
  * Unlike iOS 6 and below , on IOS 7 is non-customisable i.e., you can't modify to customise it. This alert allows you to Add view as you like in iOS7.
 
 	![ScreenShot 1](screenshot1.png)
+ * Handle alert events with either blocks or delegates.
+ 
+	![Use either delegation or block](screenshot-delegation-blocks.png)
 
  * Multilined alert texts and button titles.
  
