@@ -8,24 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CXAlertButtonItem.h"
+#import "CXAlertViewDelegate.h"
 
-@class CXAlertView;
 typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
-
-@protocol CXAlertViewDelegate <NSObject>
-@optional
-
-// Called when we cancel a view (eg. the user clicks the Home button). This is not called when the user clicks the cancel button.
-// If not defined in the delegate, we simulate a click in the cancel button
-- (void)alertViewCancel:(UIAlertView *)alertView;
-
-- (void)willPresentCXAlertView:(CXAlertView *)alertView;  // before animation and showing view
-- (void)didPresentCXAlertView:(CXAlertView *)alertView;  // after animation
-
-- (void)cxAlertView:(CXAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex; // before animation and hiding view
-- (void)cxAlertView:(CXAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;  // after animation
-
-@end
 
 @interface CXAlertView : UIView
 

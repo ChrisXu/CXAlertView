@@ -69,6 +69,7 @@
 		83B3A84917E9B1A7001BCBC6 /* CXAlertButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertButtonItem.m; sourceTree = "<group>"; };
 		83E10DD417F53A5500BC5D18 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		83E10DD617F549F400BC5D18 /* bkg2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bkg2.jpg; sourceTree = "<group>"; };
+		C3D7F4FA1865D0380006AF76 /* CXAlertViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertViewDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +166,7 @@
 				83B3A84317E9B18D001BCBC6 /* CXAlertViewController.m */,
 				8357110717E1917D004C8155 /* CXAlertView.h */,
 				8357110817E1917D004C8155 /* CXAlertView.m */,
+				C3D7F4FA1865D0380006AF76 /* CXAlertViewDelegate.h */,
 			);
 			name = CXAlertView;
 			path = ../../CXAlertView;
