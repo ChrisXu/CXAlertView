@@ -157,10 +157,10 @@
     CXAlertView *alertView = [[CXAlertView alloc] initWithTitle:@"Blur Background Trigger \n Test" message:nil cancelButtonTitle:@"Dismiss"];
     
     [alertView addButtonWithTitle:@"Disable"
-                             type:CXAlertViewButtonTypeCustom
-                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
-                              alertView.showBlurBackground = NO;
-                          }];
+               type:CXAlertViewButtonTypeCustom
+               handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                  alertView.showBlurBackground = NO;
+               }];
     
     [alertView addButtonWithTitle:@"Enable"
                              type:CXAlertViewButtonTypeCustom
