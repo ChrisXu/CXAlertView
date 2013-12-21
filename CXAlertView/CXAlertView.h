@@ -11,11 +11,28 @@
 
 @class CXAlertView;
 typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
+
+@protocol CXAlertViewDelegate <NSObject>
+@optional
+
+// Called when we cancel a view (eg. the user clicks the Home button). This is not called when the user clicks the cancel button.
+// If not defined in the delegate, we simulate a click in the cancel button
+- (void)alertViewCancel:(UIAlertView *)alertView;
+
+- (void)willPresentCXAlertView:(CXAlertView *)alertView;  // before animation and showing view
+- (void)didPresentCXAlertView:(CXAlertView *)alertView;  // after animation
+
+- (void)cxAlertView:(CXAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex; // before animation and hiding view
+- (void)cxAlertView:(CXAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;  // after animation
+
+@end
+
 @interface CXAlertView : UIView
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) UIView *contentView;
 @property (nonatomic, strong, readonly) NSMutableArray *buttons;
+@property (nonatomic, assign) NSInteger cancelButtonIndex;
 
 @property (nonatomic, copy) CXAlertViewHandler willShowHandler;
 @property (nonatomic, copy) CXAlertViewHandler didShowHandler;
@@ -51,7 +68,7 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle;
 - (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView cancelButtonTitle:(NSString *)cancelButtonTitle;
 // Buttons
-- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler;
+- (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler;
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
 - (void)setCancelButtonImage:(UIImage *)cancelButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
 - (void)setCustomButtonImage:(UIImage *)customButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
