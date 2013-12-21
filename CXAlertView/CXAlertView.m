@@ -277,7 +277,7 @@ static CXAlertView *__cx_alert_current_view;
 // AlertView action
 - (void)show
 {
-    self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
+	self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
     
     if (![[CXAlertView sharedQueue] containsObject:self]) {
         [[CXAlertView sharedQueue] addObject:self];
@@ -300,6 +300,14 @@ static CXAlertView *__cx_alert_current_view;
     if (self.willShowHandler) {
         self.willShowHandler(self);
     }
+	
+	if(self.delegate)
+	{
+		if([self.delegate respondsToSelector:@selector(willPresentCXAlertView:)])
+		{
+			[self.delegate willPresentCXAlertView:self];
+		}
+	}
     
     self.visible = YES;
     
@@ -327,6 +335,14 @@ static CXAlertView *__cx_alert_current_view;
         if (self.didShowHandler) {
             self.didShowHandler(self);
         }
+		
+		if(self.delegate)
+		{
+			if([self.delegate respondsToSelector:@selector(didPresentCXAlertView:)])
+			{
+				[self.delegate didPresentCXAlertView:self];
+			}
+		}
         
         [CXAlertView setAnimating:NO];
         
