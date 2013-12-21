@@ -53,6 +53,8 @@ static CXAlertView *__cx_alert_current_view;
 @property (nonatomic, strong) UIWindow *alertWindow;
 @property (nonatomic, assign, getter = isVisible) BOOL visible;
 
+@property (nonatomic, assign) id<CXAlertViewDelegate> delegate;
+
 @property (nonatomic, strong) UIScrollView *topScrollView;
 @property (nonatomic, strong) UIScrollView *contentScrollView;
 @property (nonatomic, strong) CXAlertButtonContainerView *bottomScrollView;
@@ -96,6 +98,7 @@ static CXAlertView *__cx_alert_current_view;
 
 // Buttons
 - (UIFont*)fontForButtonType:(CXAlertViewButtonType)type;
+- (NSInteger)addDelegatedButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type;
 - (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font;
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem;
@@ -144,7 +147,9 @@ static CXAlertView *__cx_alert_current_view;
     [super layoutSubviews];
     [self validateLayout];
 }
+
 #pragma mark - CXAlertView PB
+
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle
 {
@@ -199,7 +204,56 @@ static CXAlertView *__cx_alert_current_view;
     return self;
 }
 
+- (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<CXAlertViewDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...
+{
+	CXAlertView *newAlert=[self initWithTitle:title message:message cancelButtonTitle:nil];
+	newAlert.delegate=delegate;
+	
+	[self addDelegatedButtonWithTitle:otherButtonTitles type:CXAlertViewButtonTypeDefault];
+	
+	va_list args;
+	va_start(args, otherButtonTitles);
+	
+	id arg = nil;
+	while ((arg = va_arg(args,NSString*))) {
+		[self addDelegatedButtonWithTitle:arg type:CXAlertViewButtonTypeDefault];
+	}
+	
+	va_end(args);
+	
+	newAlert.cancelButtonIndex=[self addDelegatedButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel];
+	
+	return newAlert;
+}
+
 // Buttons
+- (NSInteger)addDelegatedButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type
+{
+	return [self addButtonWithTitle:title type:type handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+		
+		NSInteger buttonIndex=[alertView.buttons indexOfObject:button];
+		
+		if(alertView.delegate)
+		{
+			if([alertView.delegate respondsToSelector:@selector(cxAlertView:willDismissWithButtonIndex::)])
+			{
+				[alertView.delegate cxAlertView:alertView willDismissWithButtonIndex:buttonIndex];
+			}
+		}
+		
+		[alertView dismiss];
+		
+		if(alertView.delegate)
+		{
+			if([alertView.delegate respondsToSelector:@selector(cxAlertView:didDismissWithButtonIndex:)])
+			{
+				[alertView.delegate cxAlertView:alertView didDismissWithButtonIndex:[alertView.buttons indexOfObject:button]];
+			}
+		}
+		
+	}];
+}
+
 - (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler
 {
     UIFont *font=[self fontForButtonType:type];

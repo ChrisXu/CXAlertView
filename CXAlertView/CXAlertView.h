@@ -49,18 +49,23 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @property (nonatomic, assign) CGFloat bottomScrollViewHeight;
 @property (nonatomic, assign) BOOL showButtonLine;
 @property (nonatomic, assign) BOOL showBlurBackground;
+
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle;
 - (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView cancelButtonTitle:(NSString *)cancelButtonTitle;
+- (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<CXAlertViewDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
+
 // Buttons
 - (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler;
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
 - (void)setCancelButtonImage:(UIImage *)cancelButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
 - (void)setCustomButtonImage:(UIImage *)customButtonImage forState:(UIControlState)state NS_AVAILABLE_IOS(5_0) UI_APPEARANCE_SELECTOR;
+
 // AlertView action
 - (void)show;
 - (void)dismiss;
 - (void)shake;
+
 // Operation
 - (void)cleanAllPenddingAlert;
 @end
