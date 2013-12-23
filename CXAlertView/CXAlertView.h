@@ -64,6 +64,7 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 // AlertView action
 - (void)show;
 - (void)dismiss;
+- (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex;
 - (void)shake;
 
 // Operation

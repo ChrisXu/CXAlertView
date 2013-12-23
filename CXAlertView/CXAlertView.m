@@ -209,18 +209,20 @@ static CXAlertView *__cx_alert_current_view;
 	CXAlertView *newAlert=[self initWithTitle:title message:message cancelButtonTitle:nil];
 	newAlert.delegate=delegate;
 	
-	[self addDelegatedButtonWithTitle:otherButtonTitles type:CXAlertViewButtonTypeDefault];
+	if(otherButtonTitles)
+	{
+		[self addDelegatedButtonWithTitle:otherButtonTitles type:CXAlertViewButtonTypeDefault];
 	
-	va_list args;
-	va_start(args, otherButtonTitles);
+		va_list args;
+		va_start(args, otherButtonTitles);
 	
-	id arg = nil;
-	while ((arg = va_arg(args,NSString*))) {
-		[self addDelegatedButtonWithTitle:arg type:CXAlertViewButtonTypeDefault];
+		id arg = nil;
+		while ((arg = va_arg(args,NSString*))) {
+			[self addDelegatedButtonWithTitle:arg type:CXAlertViewButtonTypeDefault];
+		}
+	
+		va_end(args);
 	}
-	
-	va_end(args);
-	
 	newAlert.cancelButtonIndex=[self addDelegatedButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel];
 	
 	return newAlert;
@@ -235,7 +237,7 @@ static CXAlertView *__cx_alert_current_view;
 		
 		if(alertView.delegate)
 		{
-			if([alertView.delegate respondsToSelector:@selector(cxAlertView:willDismissWithButtonIndex::)])
+			if([alertView.delegate respondsToSelector:@selector(cxAlertView:willDismissWithButtonIndex:)])
 			{
 				[alertView.delegate cxAlertView:alertView willDismissWithButtonIndex:buttonIndex];
 			}
@@ -358,6 +360,12 @@ static CXAlertView *__cx_alert_current_view;
     [self dismissWithCleanup:YES];
 }
 
+- (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex;
+{
+	CXAlertButtonItem *button=[self.buttons objectAtIndex:buttonIndex];
+	button.action(self,button);
+}
+
 - (void)shake
 {
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
@@ -380,7 +388,7 @@ static CXAlertView *__cx_alert_current_view;
 + (NSMutableArray *)sharedQueue
 {
     if (!__cx_pending_alert_queue) {
-        __cx_pending_alert_queue = [NSMutableArray array];
+        __cx_pending_alert_queue = [[NSMutableArray alloc] init];
     }
     return __cx_pending_alert_queue;
 }
@@ -682,7 +690,7 @@ static CXAlertView *__cx_alert_current_view;
         
         [CXAlertView setCurrentAlertView:nil];
         
-        CXAlertView *nextAlertView;
+        CXAlertView *nextAlertView=nil;
         NSInteger index = [[CXAlertView sharedQueue] indexOfObject:self];
         if (index != NSNotFound && index < [CXAlertView sharedQueue].count - 1) {
             nextAlertView = [CXAlertView sharedQueue][index + 1];
