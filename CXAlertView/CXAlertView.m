@@ -222,7 +222,11 @@ static CXAlertView *__cx_alert_current_view;
 	
 		va_end(args);
 	}
-	newAlert.cancelButtonIndex=[self addDelegatedButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel];
+	
+	if(cancelButtonTitle)
+	{
+		newAlert.cancelButtonIndex=[self addDelegatedButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel];
+	}
 	
 	return newAlert;
 }
