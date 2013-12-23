@@ -503,6 +503,7 @@ static CXAlertView *__cx_alert_current_view;
     [self.titleLabel removeFromSuperview];
     self.titleLabel = nil;
     
+	self.alertWindow.hidden=YES;
     [self.alertWindow removeFromSuperview];
     self.alertWindow = nil;
     self.layoutDirty = NO;
@@ -740,7 +741,7 @@ static CXAlertView *__cx_alert_current_view;
         }
     }
     
-    [_oldKeyWindow makeKeyWindow];
+    [_oldKeyWindow makeKeyAndVisible];
     _oldKeyWindow.hidden = NO;
 }
 // Transition
