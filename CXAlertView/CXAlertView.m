@@ -98,7 +98,6 @@ static CXAlertView *__cx_alert_current_view;
 
 // Buttons
 - (UIFont*)fontForButtonType:(CXAlertViewButtonType)type;
-- (NSInteger)addDelegatedButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type;
 - (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font;
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem;
