@@ -18,6 +18,7 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @property (nonatomic, copy) UIView *contentView;
 @property (nonatomic, strong, readonly) NSMutableArray *buttons;
 @property (nonatomic, assign) NSInteger cancelButtonIndex;
+@property (nonatomic, assign) NSInteger supportedOrientation;
 
 @property (nonatomic, copy) CXAlertViewHandler willShowHandler;
 @property (nonatomic, copy) CXAlertViewHandler didShowHandler;

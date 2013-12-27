@@ -136,6 +136,7 @@ static CXAlertView *__cx_alert_current_view;
 {
     self = [super initWithFrame:frame];
     if (self) {
+		_supportedOrientation=NSNotFound;
         // Initialization code
     }
     return self;
@@ -152,6 +153,8 @@ static CXAlertView *__cx_alert_current_view;
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle
 {
+	_supportedOrientation=NSNotFound;
+	
     _vericalPadding = kDefaultVericalPadding;
     _containerWidth = kDefaultContainerWidth;
     
@@ -282,7 +285,10 @@ static CXAlertView *__cx_alert_current_view;
 // AlertView action
 - (void)show
 {
-	self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
+	if(self.oldKeyWindow==nil)
+	{
+		self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
+	}
     
     if (![[CXAlertView sharedQueue] containsObject:self]) {
         [[CXAlertView sharedQueue] addObject:self];
@@ -744,9 +750,10 @@ static CXAlertView *__cx_alert_current_view;
         }
     }
     
+	_oldKeyWindow.hidden = NO;
     [_oldKeyWindow makeKeyAndVisible];
-    _oldKeyWindow.hidden = NO;
 }
+
 // Transition
 - (void)transitionInCompletion:(void(^)(void))completion
 {
