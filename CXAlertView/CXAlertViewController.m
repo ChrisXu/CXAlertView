@@ -52,17 +52,42 @@
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAll;
+	if(self.alertView.supportedOrientation!=NSNotFound)
+	{
+		return self.alertView.supportedOrientation;
+	}
+	
+	return UIInterfaceOrientationMaskAll;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+	if(self.alertView.supportedOrientation!=NSNotFound)
+	{
+		BOOL retVal=(toInterfaceOrientation==self.alertView.supportedOrientation);
+		NSLog(@"returning %@",(retVal)?@"YES":@"NO");
+		return retVal;
+	}
     return YES;
 }
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+	if(self.alertView.supportedOrientation!=NSNotFound)
+	{
+		UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+		// Return yes to allow the device to load initially.
+		if (orientation == UIDeviceOrientationUnknown)
+		{
+			return YES;
+		}
+		
+		// Pass iOS 6 Request for orientation on to iOS 5 code. (backwards compatible)
+		BOOL result = [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation];
+		return result;
+	}
+	
+	return YES;
 }
 
 @end

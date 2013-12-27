@@ -11,12 +11,12 @@
 
 
 #define defaultMessageTitle			@"Chris Xu"
-#define multiLinedMessageContent	@"This is an alert view developed by Chris Xu and enhanced by other contributors which allows you to serve following purposes \n\n - show ios7 styled alerts in ios 5 and 6 \n\n - multilined alert texts and button titles \n\n - fully customozable alertview with changable colors,radiuses,fonts..etc \n\n - much more to come"
+#define multiLinedMessageContent	@"This is an alert view developed by Chris Xu and enhanced by other contributors which allows you to serve following purposes \n\n - show ios7 styled alerts in ios 5 and 6 \n\n - multilined alert texts and button titles \n\n - fully customozable alertview with changable colors,radiuses,fonts..etc \n\n - handle events with blocks or delegation \n\n - much more to come"
 #define multiLineMessageCancelText		@"I dont understand clearly"
 #define multiLineMessageAcceptedText	@"I understood and accepting it"
 
 
-@interface CXViewController ()
+@interface CXViewController () <CXAlertViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *myInfoView;
 
@@ -42,13 +42,13 @@
 {
     [super viewDidLoad];
     
-//    [[CXAlertView appearance] setTitleFont:[UIFont boldSystemFontOfSize:18.]];
-//    [[CXAlertView appearance] setTitleColor:[UIColor blackColor]];
-//    [[CXAlertView appearance] setCornerRadius:12];
-//    [[CXAlertView appearance] setShadowRadius:20];
-//    [[CXAlertView appearance] setButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
-//    [[CXAlertView appearance] setCancelButtonColor:[UIColor colorWithRed:0.047 green:0.337 blue:1.000 alpha:1.000]];
-//    [[CXAlertView appearance] setCustomButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
+	//    [[CXAlertView appearance] setTitleFont:[UIFont boldSystemFontOfSize:18.]];
+	//    [[CXAlertView appearance] setTitleColor:[UIColor blackColor]];
+	//    [[CXAlertView appearance] setCornerRadius:12];
+	//    [[CXAlertView appearance] setShadowRadius:20];
+	//    [[CXAlertView appearance] setButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
+	//    [[CXAlertView appearance] setCancelButtonColor:[UIColor colorWithRed:0.047 green:0.337 blue:1.000 alpha:1.000]];
+	//    [[CXAlertView appearance] setCustomButtonColor:[UIColor colorWithRed:0.039 green:0.380 blue:0.992 alpha:1.000]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -143,10 +143,10 @@
                               button.enabled = NO;
                               [button setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
                               [alertView addButtonWithTitle:@"OK"
-                                                        type:CXAlertViewButtonTypeCancel
-                                                     handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
-                                                         [alertView dismiss];
-                                                     }];
+													   type:CXAlertViewButtonTypeCancel
+													handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+														[alertView dismiss];
+													}];
                           }];
     
     [alertView show];
@@ -157,10 +157,10 @@
     CXAlertView *alertView = [[CXAlertView alloc] initWithTitle:@"Blur Background Trigger \n Test" message:nil cancelButtonTitle:@"Dismiss"];
     
     [alertView addButtonWithTitle:@"Disable"
-                             type:CXAlertViewButtonTypeCustom
-                          handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
-                              alertView.showBlurBackground = NO;
-                          }];
+               type:CXAlertViewButtonTypeCustom
+               handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                  alertView.showBlurBackground = NO;
+               }];
     
     [alertView addButtonWithTitle:@"Enable"
                              type:CXAlertViewButtonTypeCustom
@@ -180,22 +180,10 @@
 
 -(IBAction)showMultiLinedCXAlert:(id)sender
 {
-	CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:defaultMessageTitle message:multiLinedMessageContent cancelButtonTitle:nil];
-    
-	// This is a demo for multiple line of title.
-    [alertViewMe addButtonWithTitle:multiLineMessageAcceptedText
-							   type:CXAlertViewButtonTypeDefault
-							handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
-								[alertView dismiss];
-							}];
-    
-    [alertViewMe addButtonWithTitle:multiLineMessageCancelText
-							   type:CXAlertViewButtonTypeCancel
-							handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
-								[alertView dismiss];
-							}];
+	CXAlertView *alertViewMe=[[CXAlertView alloc] initWithTitle:defaultMessageTitle message:multiLinedMessageContent delegate:self cancelButtonTitle:multiLineMessageCancelText otherButtonTitles:multiLineMessageAcceptedText, nil];
+	[alertViewMe show];
 	
-    [alertViewMe show];
+	return;
 }
 
 - (IBAction)showSystemAlert:(id)sender
@@ -234,4 +222,28 @@
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
 }
+
+#pragma mark cxalert delegate
+
+-(void)willPresentCXAlertView:(CXAlertView *)alertView
+{
+	NSLog(@"Alert is about to show - do some customization");
+}
+
+-(void)didPresentCXAlertView:(CXAlertView *)alertView
+{
+	NSLog(@"Alert View shown");
+}
+
+-(void)cxAlertView:(CXAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+	NSLog(@"button clicked at index %d",buttonIndex);
+	if(alertView.cancelButtonIndex==buttonIndex)
+	{
+		NSLog(@"alert view cancelled");
+	}
+}
+
+#pragma mark -
+
 @end

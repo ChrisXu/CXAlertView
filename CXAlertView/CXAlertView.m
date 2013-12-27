@@ -53,6 +53,8 @@ static CXAlertView *__cx_alert_current_view;
 @property (nonatomic, strong) UIWindow *alertWindow;
 @property (nonatomic, assign, getter = isVisible) BOOL visible;
 
+@property (nonatomic, assign) id<CXAlertViewDelegate> delegate;
+
 @property (nonatomic, strong) UIScrollView *topScrollView;
 @property (nonatomic, strong) UIScrollView *contentScrollView;
 @property (nonatomic, strong) CXAlertButtonContainerView *bottomScrollView;
@@ -96,7 +98,7 @@ static CXAlertView *__cx_alert_current_view;
 
 // Buttons
 - (UIFont*)fontForButtonType:(CXAlertViewButtonType)type;
-- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font;
+- (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font;
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem;
 - (void)setButtonImage:(UIImage *)image forState:(UIControlState)state andButtonType:(CXAlertViewButtonType)type;
@@ -134,6 +136,7 @@ static CXAlertView *__cx_alert_current_view;
 {
     self = [super initWithFrame:frame];
     if (self) {
+		_supportedOrientation=NSNotFound;
         // Initialization code
     }
     return self;
@@ -144,10 +147,14 @@ static CXAlertView *__cx_alert_current_view;
     [super layoutSubviews];
     [self validateLayout];
 }
+
 #pragma mark - CXAlertView PB
+
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle
 {
+	_supportedOrientation=NSNotFound;
+	
     _vericalPadding = kDefaultVericalPadding;
     _containerWidth = kDefaultContainerWidth;
     
@@ -191,19 +198,74 @@ static CXAlertView *__cx_alert_current_view;
         _showBlurBackground = YES;
         [self setupScrollViews];
         if (cancelButtonTitle) {
-            [self addButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
-                [alertView dismiss];
+            self.cancelButtonIndex=[self addButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+					[alertView dismiss];
             }];
         }
     }
     return self;
 }
 
+- (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<CXAlertViewDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...
+{
+	CXAlertView *newAlert=[self initWithTitle:title message:message cancelButtonTitle:nil];
+	newAlert.delegate=delegate;
+	
+	if(otherButtonTitles)
+	{
+		[self addDelegatedButtonWithTitle:otherButtonTitles type:CXAlertViewButtonTypeDefault];
+	
+		va_list args;
+		va_start(args, otherButtonTitles);
+	
+		id arg = nil;
+		while ((arg = va_arg(args,NSString*))) {
+			[self addDelegatedButtonWithTitle:arg type:CXAlertViewButtonTypeDefault];
+		}
+	
+		va_end(args);
+	}
+	
+	if(cancelButtonTitle)
+	{
+		newAlert.cancelButtonIndex=[self addDelegatedButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel];
+	}
+	
+	return newAlert;
+}
+
 // Buttons
-- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler
+- (NSInteger)addDelegatedButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type
+{
+	return [self addButtonWithTitle:title type:type handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+		
+		NSInteger buttonIndex=[alertView.buttons indexOfObject:button];
+		
+		if(alertView.delegate)
+		{
+			if([alertView.delegate respondsToSelector:@selector(cxAlertView:willDismissWithButtonIndex:)])
+			{
+				[alertView.delegate cxAlertView:alertView willDismissWithButtonIndex:buttonIndex];
+			}
+		}
+		
+		[alertView dismiss];
+		
+		if(alertView.delegate)
+		{
+			if([alertView.delegate respondsToSelector:@selector(cxAlertView:didDismissWithButtonIndex:)])
+			{
+				[alertView.delegate cxAlertView:alertView didDismissWithButtonIndex:[alertView.buttons indexOfObject:button]];
+			}
+		}
+		
+	}];
+}
+
+- (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler
 {
     UIFont *font=[self fontForButtonType:type];
-	[self addButtonWithTitle:title type:type handler:handler font:font];
+	return [self addButtonWithTitle:title type:type handler:handler font:font];
 }
 
 - (void)setDefaultButtonImage:(UIImage *)defaultButtonImage forState:(UIControlState)state
@@ -223,7 +285,10 @@ static CXAlertView *__cx_alert_current_view;
 // AlertView action
 - (void)show
 {
-    self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
+	if(self.oldKeyWindow==nil)
+	{
+		self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
+	}
     
     if (![[CXAlertView sharedQueue] containsObject:self]) {
         [[CXAlertView sharedQueue] addObject:self];
@@ -246,6 +311,14 @@ static CXAlertView *__cx_alert_current_view;
     if (self.willShowHandler) {
         self.willShowHandler(self);
     }
+	
+	if(self.delegate)
+	{
+		if([self.delegate respondsToSelector:@selector(willPresentCXAlertView:)])
+		{
+			[self.delegate willPresentCXAlertView:self];
+		}
+	}
     
     self.visible = YES;
     
@@ -273,6 +346,14 @@ static CXAlertView *__cx_alert_current_view;
         if (self.didShowHandler) {
             self.didShowHandler(self);
         }
+		
+		if(self.delegate)
+		{
+			if([self.delegate respondsToSelector:@selector(didPresentCXAlertView:)])
+			{
+				[self.delegate didPresentCXAlertView:self];
+			}
+		}
         
         [CXAlertView setAnimating:NO];
         
@@ -288,13 +369,19 @@ static CXAlertView *__cx_alert_current_view;
     [self dismissWithCleanup:YES];
 }
 
+- (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex;
+{
+	CXAlertButtonItem *button=[self.buttons objectAtIndex:buttonIndex];
+	button.action(self,button);
+}
+
 - (void)shake
 {
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
     animation.duration = 0.1;
 	animation.repeatCount = 3;
     animation.autoreverses = YES;
-//    animation.fromValue = [NSNumber numberWithFloat:0.0];
+	// animation.fromValue = [NSNumber numberWithFloat:0.0];
     animation.toValue = [NSNumber numberWithFloat:10.0];
     [self.layer removeAllAnimations];
     [self.layer addAnimation:animation forKey:@"transform.translation.x"];
@@ -310,7 +397,7 @@ static CXAlertView *__cx_alert_current_view;
 + (NSMutableArray *)sharedQueue
 {
     if (!__cx_pending_alert_queue) {
-        __cx_pending_alert_queue = [NSMutableArray array];
+        __cx_pending_alert_queue = [[NSMutableArray alloc] init];
     }
     return __cx_pending_alert_queue;
 }
@@ -425,6 +512,7 @@ static CXAlertView *__cx_alert_current_view;
     [self.titleLabel removeFromSuperview];
     self.titleLabel = nil;
     
+	self.alertWindow.hidden=YES;
     [self.alertWindow removeFromSuperview];
     self.alertWindow = nil;
     self.layoutDirty = NO;
@@ -612,7 +700,7 @@ static CXAlertView *__cx_alert_current_view;
         
         [CXAlertView setCurrentAlertView:nil];
         
-        CXAlertView *nextAlertView;
+        CXAlertView *nextAlertView=nil;
         NSInteger index = [[CXAlertView sharedQueue] indexOfObject:self];
         if (index != NSNotFound && index < [CXAlertView sharedQueue].count - 1) {
             nextAlertView = [CXAlertView sharedQueue][index + 1];
@@ -662,9 +750,10 @@ static CXAlertView *__cx_alert_current_view;
         }
     }
     
-    [_oldKeyWindow makeKeyWindow];
-    _oldKeyWindow.hidden = NO;
+	_oldKeyWindow.hidden = NO;
+    [_oldKeyWindow makeKeyAndVisible];
 }
+
 // Transition
 - (void)transitionInCompletion:(void(^)(void))completion
 {
@@ -760,7 +849,7 @@ static CXAlertView *__cx_alert_current_view;
 	_bottomScrollViewHeight=maxHeight;
 }
 
-- (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
+- (NSInteger)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
 {
     CXAlertButtonItem *button = [self buttonItemWithType:type font:font];
     button.title = title;
@@ -773,7 +862,6 @@ static CXAlertView *__cx_alert_current_view;
 	[button.titleLabel setNumberOfLines:0];
 	button.titleLabel.lineBreakMode=BT_LBM;
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
-	
 	
     if ([_buttons count] == 0)
 	{
@@ -818,6 +906,8 @@ static CXAlertView *__cx_alert_current_view;
 	
 	CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
 	_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollView.contentSize.height);
+	
+	return [_buttons count]-1;
 }
 
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font
