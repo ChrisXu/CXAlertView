@@ -258,6 +258,10 @@ static CXAlertView *__cx_alert_current_view;
     CXAlertViewController *viewController = [[CXAlertViewController alloc] initWithNibName:nil bundle:nil];
     viewController.alertView = self;
     
+    if ([self.oldKeyWindow.rootViewController respondsToSelector:@selector(prefersStatusBarHidden)]) {
+        viewController.rootViewControllerPrefersStatusBarHidden = self.oldKeyWindow.rootViewController.prefersStatusBarHidden;
+    }
+    
     if (!self.alertWindow) {
         UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
         window.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

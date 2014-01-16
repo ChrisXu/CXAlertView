@@ -110,6 +110,11 @@
     [alertView show];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (IBAction)showSquenceAlertView:(id)sender
 {
     // This is a demo for poping up two alertview.

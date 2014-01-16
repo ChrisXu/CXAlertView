@@ -64,5 +64,8 @@
 {
     return YES;
 }
-
+- (BOOL)prefersStatusBarHidden
+{
+    return _rootViewControllerPrefersStatusBarHidden;
+}
 @end
