@@ -285,10 +285,7 @@ static CXAlertView *__cx_alert_current_view;
 // AlertView action
 - (void)show
 {
-	if(self.oldKeyWindow==nil)
-	{
-		self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
-	}
+	self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
     
     if (![[CXAlertView sharedQueue] containsObject:self]) {
         [[CXAlertView sharedQueue] addObject:self];
@@ -750,8 +747,17 @@ static CXAlertView *__cx_alert_current_view;
         }
     }
     
-	_oldKeyWindow.hidden = NO;
-    [_oldKeyWindow makeKeyAndVisible];
+	if([_oldKeyWindow isKeyWindow])
+	{
+		_oldKeyWindow.hidden = NO;
+		[_oldKeyWindow makeKeyAndVisible];
+	}
+	else
+	{
+		UIWindow *win=[[[UIApplication sharedApplication] windows] objectAtIndex:0];
+		[win makeKeyAndVisible];
+		self.oldKeyWindow=nil;
+	}
 }
 
 // Transition
