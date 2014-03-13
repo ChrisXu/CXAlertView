@@ -27,6 +27,7 @@ This is a custom alert view developed by Chris Xu and enhanced by other contribu
 
 * CocoaPods add `pod 'CXAlertView'`
 
+* If using as a git submodule, you will also need to add [LiveFrost](https://github.com/radi/LiveFrost.git)
 
 ##How to use
 ---
