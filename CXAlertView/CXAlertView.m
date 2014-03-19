@@ -11,6 +11,7 @@
 #import "CXAlertButtonItem.h"
 #import "CXAlertViewController.h"
 #import "CXAlertButtonContainerView.h"
+#import "CXBlurView.h"
 #import <QuartzCore/QuartzCore.h>
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
@@ -20,8 +21,6 @@
 	#define LBM UILineBreakModeTailTruncation
 	#define BT_LBM UILineBreakModeWordWrap
 #endif
-
-#import "LFGlassView.h"
 
 static CGFloat const kDefaultScrollViewPadding = 10.;
 static CGFloat const kDefaultButtonHeight = 44.;
@@ -59,7 +58,7 @@ static CXAlertView *__cx_alert_current_view;
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIView *containerView;
-@property (nonatomic, strong) LFGlassView *blurView;
+@property (nonatomic, strong) CXBlurView *blurView;
 
 @property (nonatomic, assign, getter = isLayoutDirty) BOOL layoutDirty;
 
@@ -284,8 +283,6 @@ static CXAlertView *__cx_alert_current_view;
         if (index < [CXAlertView sharedQueue].count - 1) {
             [self dismissWithCleanup:NO]; // dismiss to show next alert view
         }
-
-        self.blurView.liveBlurring = NO;
     }];
 }
 
@@ -618,6 +615,7 @@ static CXAlertView *__cx_alert_current_view;
 
         [CXAlertView setCurrentAlertView:nil];
 
+        // show next alertView
         CXAlertView *nextAlertView;
         NSInteger index = [[CXAlertView sharedQueue] indexOfObject:self];
         if (index != NSNotFound && index < [CXAlertView sharedQueue].count - 1) {
@@ -903,14 +901,10 @@ static CXAlertView *__cx_alert_current_view;
 
     if (_showBlurBackground) {
         if (self.blurView == nil) {
-            self.blurView = [[LFGlassView alloc] initWithFrame:self.containerView.frame];
+            self.blurView = [[CXBlurView alloc] initWithFrame:self.containerView.frame];
             self.blurView.clipsToBounds = YES;
             self.blurView.layer.cornerRadius = self.cornerRadius;
-            self.blurView.blurRadius = 10.;
-            self.blurView.scaleFactor = 1.;
         }
-
-        self.blurView.liveBlurring = YES;
         [self insertSubview:self.blurView belowSubview:self.containerView];
     } else {
         [self.blurView removeFromSuperview];
