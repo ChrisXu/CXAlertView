@@ -25,6 +25,7 @@
 
 static CGFloat const kDefaultScrollViewPadding = 10.;
 static CGFloat const kDefaultButtonHeight = 44.;
+static CGFloat const kDefaultNoButtonHeight = 0.;
 static CGFloat const kDefaultContainerWidth = 280.;
 static CGFloat const kDefaultVericalPadding = 10.;
 static CGFloat const kDefaultTopScrollViewMaxHeight = 50.;
@@ -174,14 +175,21 @@ static CXAlertView *__cx_alert_current_view;
         _contentView = contentView;
 
         _scrollViewPadding = kDefaultScrollViewPadding;
-        _buttonHeight = kDefaultButtonHeight;
+        if (cancelButtonTitle) {
+            _buttonHeight = kDefaultButtonHeight;
+            _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
+            _showButtonLine = YES;
+        }else{
+            _buttonHeight = kDefaultNoButtonHeight;
+            _bottomScrollViewHeight = kDefaultNoButtonHeight;
+        }
+        
         _containerWidth = kDefaultContainerWidth;
         _vericalPadding = kDefaultVericalPadding;
         _topScrollViewMaxHeight = kDefaultTopScrollViewMaxHeight;
         _topScrollViewMinHeight = kDefaultTopScrollViewMinHeight;
         _contentScrollViewMaxHeight = kDefaultContentScrollViewMaxHeight;
         _contentScrollViewMinHeight = kDefaultContentScrollViewMinHeight;
-        _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
 
 		_buttonFont=[UIFont systemFontOfSize:[UIFont buttonFontSize]];
 		_cancelButtonFont = [UIFont boldSystemFontOfSize:[UIFont buttonFontSize]];
