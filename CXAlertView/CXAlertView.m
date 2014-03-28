@@ -584,6 +584,8 @@ static CXAlertView *__cx_alert_current_view;
 
 - (void)updateBottomScrollView
 {
+    _bottomScrollView.defaultTopLineVisible = _showButtonLine;
+	
     CGFloat y = 0;
 
     y += [self heightForTopScrollView] + self.scrollViewPadding;
@@ -1062,5 +1064,14 @@ static CXAlertView *__cx_alert_current_view;
     }
     _showBlurBackground = showBlurBackground;
     [self updateBlurBackground];
+}
+
+- (void)setShowButtonLine:(BOOL)showButtonLine
+{
+    if (_showButtonLine == showButtonLine) {
+        return;
+    }
+    _showButtonLine = showButtonLine;
+    [self updateBottomScrollView];
 }
 @end
