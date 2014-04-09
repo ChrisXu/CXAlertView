@@ -25,5 +25,6 @@ typedef void(^CXAlertButtonHandler)(CXAlertView *alertView, CXAlertButtonItem *b
 @property (nonatomic, assign) CXAlertViewButtonType type;
 @property (nonatomic, copy) CXAlertButtonHandler action;
 @property (nonatomic) BOOL defaultRightLineVisible;
+@property (nonatomic) BOOL defaultTopLineVisible;
 
 @end

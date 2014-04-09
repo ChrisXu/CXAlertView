@@ -785,11 +785,12 @@ static CXAlertView *__cx_alert_current_view;
     button.defaultRightLineVisible = _showButtonLine;
     [button setTitle:title forState:UIControlStateNormal];
 
-	button.titleLabel.textAlignment=UITextAlignmentCenter;
+	button.titleLabel.textAlignment=NSTextAlignmentCenter;
 	[button.titleLabel setNumberOfLines:0];
 	button.titleLabel.lineBreakMode=BT_LBM;
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
-
+	
+	self.buttonHeight = kDefaultButtonHeight;
 
     if ([_buttons count] == 0)
 	{
@@ -798,8 +799,11 @@ static CXAlertView *__cx_alert_current_view;
 
 		[_buttons addObject:button];
 		[self setMaxSizeForAllButtons];
+		
+		CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
+		_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollView.contentSize.height);
 	}
-	else
+	else if ([_buttons count] == 1)
 	{
 		// correct first button
 		CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
@@ -813,27 +817,62 @@ static CXAlertView *__cx_alert_current_view;
 		button.alpha = 0.;
 
 		[_buttons addObject:button];
-
-		if (self.isVisible) {
-			[UIView animateWithDuration:0.3 animations:^{
-				firstButton.frame = newFrame;
-				button.alpha = 1.;
-				button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
-				[self setMaxSizeForAllButtons];
-			}];
-		}
-		else {
+				
+		void (^buttomFrameBlock)() = ^{
 			firstButton.frame = newFrame;
 			button.alpha = 1.;
 			button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
 			[self setMaxSizeForAllButtons];
+		};
+
+		if (self.isVisible) {
+			[UIView animateWithDuration:0.3 animations:^{
+				buttomFrameBlock();
+			}];
 		}
+		else {
+			buttomFrameBlock();
+		}
+		
+		CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
+		_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollView.contentSize.height);
+	}
+	else // stack buttons if more than 2
+	{
+		button.frame = CGRectMake(0, 0, self.containerWidth, self.buttonHeight);
+		button.alpha = 0.;
+		
+		[_buttons addObject:button];
+		
+		void (^buttomFrameBlock)() = ^{
+			CGFloat currentY = 0;
+			// correct existing buttons, set up new one as well
+			for (CXAlertButtonItem *button in _buttons) {
+				button.defaultRightLineVisible = NO;
+				button.defaultTopLineVisible = YES;
+				button.frame = CGRectMake(0, currentY, self.containerWidth, self.buttonHeight);
+				button.alpha = 1.;
+				[button setNeedsDisplay];
+				currentY += self.buttonHeight;
+			}
+			[self setMaxSizeForAllButtons];
+		};
+		
+		if (self.isVisible) {
+			[UIView animateWithDuration:0.3 animations:^{
+				buttomFrameBlock();
+			}];
+		}
+		else {
+			buttomFrameBlock();
+		}
+		
+		_bottomScrollViewHeight = self.buttonHeight * _buttons.count;
+		_bottomScrollView.contentSize = CGSizeMake(self.bottomScrollView.contentSize.width, _bottomScrollViewHeight);
+		[self updateBottomScrollView];
 	}
 
 	[_bottomScrollView addSubview:button];
-
-	CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
-	_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollView.contentSize.height);
 }
 
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font
