@@ -785,7 +785,7 @@ static CXAlertView *__cx_alert_current_view;
     button.defaultRightLineVisible = _showButtonLine;
     [button setTitle:title forState:UIControlStateNormal];
 
-	button.titleLabel.textAlignment=NSTextAlignmentCenter;
+	button.titleLabel.textAlignment=UITextAlignmentCenter;
 	[button.titleLabel setNumberOfLines:0];
 	button.titleLabel.lineBreakMode=BT_LBM;
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
@@ -847,12 +847,12 @@ static CXAlertView *__cx_alert_current_view;
 		void (^buttomFrameBlock)() = ^{
 			CGFloat currentY = 0;
 			// correct existing buttons, set up new one as well
-			for (CXAlertButtonItem *button in _buttons) {
-				button.defaultRightLineVisible = NO;
-				button.defaultTopLineVisible = YES;
-				button.frame = CGRectMake(0, currentY, self.containerWidth, self.buttonHeight);
-				button.alpha = 1.;
-				[button setNeedsDisplay];
+			for (CXAlertButtonItem *buttonItem in _buttons) {
+				buttonItem.defaultRightLineVisible = NO;
+				buttonItem.defaultTopLineVisible = YES;
+				buttonItem.frame = CGRectMake(0, currentY, self.containerWidth, self.buttonHeight);
+				buttonItem.alpha = 1.;
+				[buttonItem setNeedsDisplay];
 				currentY += self.buttonHeight;
 			}
 			[self setMaxSizeForAllButtons];
