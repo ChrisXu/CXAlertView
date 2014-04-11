@@ -197,6 +197,7 @@ static CXAlertView *__cx_alert_current_view;
 
         _showButtonLine = YES;
         _showBlurBackground = YES;
+        _stackButtons = YES;
         [self setupScrollViews];
         if (cancelButtonTitle) {
             [self addButtonWithTitle:cancelButtonTitle type:CXAlertViewButtonTypeCancel handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
@@ -803,7 +804,7 @@ static CXAlertView *__cx_alert_current_view;
 		CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
 		_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollView.contentSize.height);
 	}
-	else if ([_buttons count] == 1)
+	else if ([_buttons count] == 1 || !_stackButtons)
 	{
 		// correct first button
 		CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
