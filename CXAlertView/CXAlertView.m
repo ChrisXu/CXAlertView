@@ -794,7 +794,7 @@ static CXAlertView *__cx_alert_current_view;
     if ([_buttons count] == 0)
 	{
 		button.defaultRightLineVisible = NO;
-		button.frame = CGRectMake( self.containerWidth/4, 0, self.containerWidth/2, self.buttonHeight);
+		button.frame = CGRectMake( 0, 0, self.containerWidth, self.buttonHeight);
 
 		[_buttons addObject:button];
 		[self setMaxSizeForAllButtons];
@@ -806,6 +806,7 @@ static CXAlertView *__cx_alert_current_view;
 		firstButton.defaultRightLineVisible = _showButtonLine;
 		CGRect newFrame = firstButton.frame;
 		newFrame.origin.x = 0;
+        newFrame.size.width = self.containerWidth/2;
 		[firstButton setNeedsDisplay];
 
 		CGFloat last_x = self.containerWidth/2 * [_buttons count];
