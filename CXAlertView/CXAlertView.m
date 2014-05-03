@@ -806,6 +806,7 @@ static CXAlertView *__cx_alert_current_view;
 		firstButton.defaultRightLineVisible = _showButtonLine;
 		CGRect newFrame = firstButton.frame;
 		newFrame.origin.x = 0;
+        newFrame.size.width = self.containerWidth/2;
 		[firstButton setNeedsDisplay];
 
 		CGFloat last_x = self.containerWidth/2 * [_buttons count];
