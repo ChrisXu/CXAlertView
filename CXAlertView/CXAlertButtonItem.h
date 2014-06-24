@@ -20,10 +20,10 @@ typedef void(^CXAlertButtonHandler)(CXAlertView *alertView, CXAlertButtonItem *b
 
 @interface CXAlertButtonItem : UIButton
 
-
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) CXAlertViewButtonType type;
 @property (nonatomic, copy) CXAlertButtonHandler action;
 @property (nonatomic) BOOL defaultRightLineVisible;
+@property (nonatomic, assign) BOOL bottomLineVisible;
 
 @end

@@ -32,6 +32,17 @@
         CGContextAddLineToPoint(context, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
         CGContextStrokePath(context);
     }
+    
+    if (self.bottomLineVisible) {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextClearRect(context, self.bounds);
+        
+        CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0.671 green:0.675 blue:0.694 alpha:1.000].CGColor);
+        CGContextSetLineWidth(context, 1.0);
+        CGContextMoveToPoint(context, 0, CGRectGetHeight(self.frame));
+        CGContextAddLineToPoint(context, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
+        CGContextStrokePath(context);
+    }
 }
 
 @end

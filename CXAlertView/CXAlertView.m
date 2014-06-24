@@ -752,30 +752,45 @@ static CXAlertView *__cx_alert_current_view;
 
 	UIFont *fnt=[self fontForButtonType:button.type];
 	CGFloat btht=[button.title sizeWithFont:fnt constrainedToSize:desiredSize lineBreakMode:BT_LBM].height;
-	return btht+22;
+	return ceil(btht)+22;
 }
 
 -(void)setMaxSizeForAllButtons
 {
-	CGFloat maxHeight=22;
-	for(CXAlertButtonItem *button in self.buttons)
-	{
-		CGFloat ht=[self heightThatFitsButton:button];
-		if(ht>maxHeight)
-		{
-			maxHeight=ht;
-		}
-	}
+    CGFloat maxHeight=22;
+    for(CXAlertButtonItem *button in self.buttons)
+    {
+        CGFloat ht=[self heightThatFitsButton:button];
+        if(ht>maxHeight)
+        {
+            maxHeight=ht;
+        }
+    }
+    
+    if (self.layoutButtonsVertical) {
+        CGFloat ht = 0;
+        for(CXAlertButtonItem *button in self.buttons) {
+            CGRect rect = button.frame;
+            rect.size.height = maxHeight;
+            rect.origin.y = ht;
+            ht += maxHeight;
+            button.frame = rect;
+        }
+        _bottomScrollView.contentSize = CGSizeMake(self.frame.size.width, ht);
+        _bottomScrollViewHeight = ht;
+    } else {
 
-	for(CXAlertButtonItem *button in self.buttons)
-	{
-		CGRect rect=button.frame;
-		rect.size.height=maxHeight;
-		button.frame=rect;
-	}
-
-	_bottomScrollView.contentSize = CGSizeMake( _bottomScrollView.contentSize.width, maxHeight);
-	_bottomScrollViewHeight=maxHeight;
+        
+        for(CXAlertButtonItem *button in self.buttons)
+        {
+            CGRect rect=button.frame;
+            rect.size.height=maxHeight;
+            button.frame=rect;
+        }
+        
+        _bottomScrollView.contentSize = CGSizeMake( _bottomScrollView.contentSize.width, maxHeight);
+        _bottomScrollViewHeight=maxHeight;
+    }
 }
 
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
@@ -785,6 +800,7 @@ static CXAlertView *__cx_alert_current_view;
     button.action = handler;
     button.type = type;
     button.defaultRightLineVisible = _showButtonLine;
+    button.bottomLineVisible = NO;
     [button setTitle:title forState:UIControlStateNormal];
 
 	button.titleLabel.textAlignment=TA_CENTER;
@@ -793,16 +809,25 @@ static CXAlertView *__cx_alert_current_view;
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
 
 
-    if ([_buttons count] == 0)
-	{
+    if ([_buttons count] == 0) {
 		button.defaultRightLineVisible = NO;
 		button.frame = CGRectMake( 0, 0, self.containerWidth, self.buttonHeight);
 
 		[_buttons addObject:button];
 		[self setMaxSizeForAllButtons];
-	}
-	else
-	{
+	} else if (self.layoutButtonsVertical) {
+        // Vertical buttons are simpler - just grow downwards instead
+        CXAlertButtonItem *lastButton = self.buttons.lastObject;
+        lastButton.bottomLineVisible = _showButtonLine;
+        
+        CGRect lastFrame = lastButton.frame;
+        lastFrame.origin.y += self.buttonHeight;
+        button.frame = lastFrame;
+        button.defaultRightLineVisible = NO;
+        
+        [self.buttons addObject:button];
+        [self setMaxSizeForAllButtons];
+    } else {
 		// correct first button
 		CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
 		firstButton.defaultRightLineVisible = _showButtonLine;
@@ -817,19 +842,20 @@ static CXAlertView *__cx_alert_current_view;
 
 		[_buttons addObject:button];
 
+        void (^setButtonFrames)() = ^{
+            firstButton.frame = newFrame;
+            button.alpha = 1.;
+            button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
+            [self setMaxSizeForAllButtons];
+        };
+        
 		if (self.isVisible) {
 			[UIView animateWithDuration:0.3 animations:^{
-				firstButton.frame = newFrame;
-				button.alpha = 1.;
-				button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
-				[self setMaxSizeForAllButtons];
+                setButtonFrames();
 			}];
 		}
 		else {
-			firstButton.frame = newFrame;
-			button.alpha = 1.;
-			button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
-			[self setMaxSizeForAllButtons];
+            setButtonFrames();
 		}
 	}
 
