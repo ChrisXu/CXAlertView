@@ -7,7 +7,6 @@
 //
 
 #import "CXAlertView.h"
-#import "CXAlertBackgroundWindow.h"
 #import "CXAlertButtonItem.h"
 #import "CXAlertViewController.h"
 #import "CXAlertButtonContainerView.h"
@@ -36,16 +35,66 @@ static CGFloat const kDefaultBottomScrollViewHeight = 44.;
 
 @class CXAlertButtonItem;
 @class CXAlertViewController;
+@class CXAlertBackgroundWindow;
 
 static NSMutableArray *__cx_pending_alert_queue;
 static BOOL __cx_alert_animating;
 static CXAlertBackgroundWindow *__cx_alert_background_window;
 static CXAlertView *__cx_alert_current_view;
+static BOOL __cx_statsu_prefersStatusBarHidden;
+
+@interface CXAlertBackgroundWindow : UIWindow
+
+@end
+
+@interface CXTempViewController : UIViewController
+
+@end
+
+@interface CXAlertBackgroundWindow ()
+
+@end
+
+@implementation CXAlertBackgroundWindow
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.opaque = NO;
+        self.windowLevel = UIWindowLevelAlert - 1;
+        
+        self.rootViewController = [[CXTempViewController alloc] init];
+        self.rootViewController.view.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    [[UIColor colorWithWhite:0 alpha:0.5] set];
+    CGContextFillRect(context, self.bounds);
+}
+
+@end
+
+@implementation CXTempViewController
+
+- (BOOL)prefersStatusBarHidden
+{
+    return __cx_statsu_prefersStatusBarHidden;
+}
+
+@end
 
 @interface CXAlertView ()
 {
     BOOL _updateAnimated;
     NSString *_cancelButtonTitle;
+    CGFloat _maxButtonHeight;
 }
 
 @property (nonatomic, strong) UIWindow *oldKeyWindow;
@@ -95,6 +144,7 @@ static CXAlertView *__cx_alert_current_view;
 
 // Buttons
 - (UIFont*)fontForButtonType:(CXAlertViewButtonType)type;
+- (CGRect)frameWithButtonTitile:(NSString *)title type:(CXAlertViewButtonType)type;
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font;
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font;
 - (void)buttonAction:(CXAlertButtonItem *)buttonItem;
@@ -256,9 +306,10 @@ static CXAlertView *__cx_alert_current_view;
 
     CXAlertViewController *viewController = [[CXAlertViewController alloc] initWithNibName:nil bundle:nil];
     viewController.alertView = self;
-
+    
     if ([self.oldKeyWindow.rootViewController respondsToSelector:@selector(prefersStatusBarHidden)]) {
         viewController.rootViewControllerPrefersStatusBarHidden = self.oldKeyWindow.rootViewController.prefersStatusBarHidden;
+        __cx_statsu_prefersStatusBarHidden = self.oldKeyWindow.rootViewController.prefersStatusBarHidden;
     }
 
     if (!self.alertWindow) {
@@ -359,6 +410,7 @@ static CXAlertView *__cx_alert_current_view;
         __cx_alert_background_window = nil;
         return;
     }
+    
     [UIView animateWithDuration:0.3
                      animations:^{
                          __cx_alert_background_window.alpha = 0;
@@ -481,7 +533,7 @@ static CXAlertView *__cx_alert_current_view;
     _containerView.layer.cornerRadius = self.cornerRadius;
     _containerView.layer.shadowOffset = CGSizeZero;
     _containerView.layer.shadowRadius = self.shadowRadius;
-    _containerView.layer.shadowOpacity = 0.5;
+//    _containerView.layer.shadowOpacity = 1.;
 
     [self updateBlurBackground];
 }
@@ -591,7 +643,7 @@ static CXAlertView *__cx_alert_current_view;
 
     _bottomScrollView.backgroundColor = [UIColor clearColor];
     _bottomScrollView.frame = CGRectMake( 0, y, self.containerWidth, [self heightForBottomScrollView]);
-
+    
     if (![_containerView.subviews containsObject:_bottomScrollView]) {
         [_containerView addSubview:_bottomScrollView];
     }
@@ -675,7 +727,7 @@ static CXAlertView *__cx_alert_current_view;
     _containerView.alpha = 0;
     _containerView.transform = CGAffineTransformMakeScale(1.2, 1.2);
 
-    _blurView.alpha = 0;
+    _blurView.alpha = 0.9;
     _blurView.transform = CGAffineTransformMakeScale(1.2, 1.2);
 
     [UIView animateWithDuration:0.3
@@ -687,6 +739,7 @@ static CXAlertView *__cx_alert_current_view;
                          _blurView.transform = CGAffineTransformMakeScale(1.0,1.0);
                      }
                      completion:^(BOOL finished) {
+                         [_blurView blur];
                          if (completion) {
                              completion();
                          }
@@ -700,7 +753,7 @@ static CXAlertView *__cx_alert_current_view;
                          _containerView.alpha = 0;
                          _containerView.transform = CGAffineTransformMakeScale(0.9,0.9);
 
-                         _blurView.alpha = 0;
+                         _blurView.alpha = 0.9;
                          _blurView.transform = CGAffineTransformMakeScale(0.9,0.9);
                      }
                      completion:^(BOOL finished) {
@@ -730,38 +783,30 @@ static CXAlertView *__cx_alert_current_view;
 	return font;
 }
 
--(CGFloat)heightThatFitsButton:(CXAlertButtonItem*)button
+- (CGRect)frameWithButtonTitile:(NSString *)title type:(CXAlertViewButtonType)type
 {
-	CGSize desiredSize=button.frame.size;
-	desiredSize.height=desiredSize.height;
-	desiredSize.width=desiredSize.width-20;
-
-	UIFont *fnt=[self fontForButtonType:button.type];
-	CGFloat btht=[button.title sizeWithFont:fnt constrainedToSize:desiredSize lineBreakMode:BT_LBM].height;
-	return btht+22;
-}
-
--(void)setMaxSizeForAllButtons
-{
-	CGFloat maxHeight=22;
-	for(CXAlertButtonItem *button in self.buttons)
-	{
-		CGFloat ht=[self heightThatFitsButton:button];
-		if(ht>maxHeight)
-		{
-			maxHeight=ht;
-		}
-	}
-
-	for(CXAlertButtonItem *button in self.buttons)
-	{
-		CGRect rect=button.frame;
-		rect.size.height=maxHeight;
-		button.frame=rect;
-	}
-
-	_bottomScrollView.contentSize = CGSizeMake( _bottomScrollView.contentSize.width, maxHeight);
-	_bottomScrollViewHeight=maxHeight;
+    CGRect frame;
+    frame.size = CGSizeMake(self.containerWidth/2, self.buttonHeight);
+    
+    if (_buttons.count == 1) {
+        frame.origin = CGPointMake(0., 0.);
+        frame.size.width = self.containerWidth;
+    }
+    else if (_buttons.count == 2) {
+        frame.origin = CGPointMake(self.containerWidth/2, 0.);
+    }
+    else {
+        CXAlertButtonItem *lastButton = _buttons[_buttons.count - 2];
+        frame.origin = CGPointMake(CGRectGetMaxX(lastButton.frame), 0);
+    }
+    
+    UIFont *font = [self fontForButtonType:type];
+    
+	CGFloat newHeight = [title sizeWithFont:font constrainedToSize:frame.size lineBreakMode:BT_LBM].height;
+    
+    frame.size.height = MAX(newHeight, self.buttonHeight);
+    
+    return frame;
 }
 
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
@@ -778,50 +823,44 @@ static CXAlertView *__cx_alert_current_view;
 	button.titleLabel.lineBreakMode=BT_LBM;
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
 
-
-    if ([_buttons count] == 0)
+    CGFloat contentWidthOffset = 0.;
+    [_buttons addObject:button];
+    
+    if ([_buttons count] == 1)
 	{
 		button.defaultRightLineVisible = NO;
-		button.frame = CGRectMake( self.containerWidth/4, 0, self.containerWidth/2, self.buttonHeight);
-
-		[_buttons addObject:button];
-		[self setMaxSizeForAllButtons];
+		button.frame = [self frameWithButtonTitile:title type:type];
 	}
 	else
 	{
 		// correct first button
 		CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
 		firstButton.defaultRightLineVisible = _showButtonLine;
-		CGRect newFrame = firstButton.frame;
+        CGFloat lastFirstButtonWidth = CGRectGetWidth(firstButton.frame);
+		CGRect newFrame = CGRectMake( 0, 0, self.containerWidth/2, CGRectGetHeight(firstButton.frame));
 		newFrame.origin.x = 0;
-		[firstButton setNeedsDisplay];
-
-		CGFloat last_x = self.containerWidth/2 * [_buttons count];
-		button.frame = CGRectMake( last_x + self.containerWidth/2, 0, self.containerWidth/2, self.buttonHeight);
-		button.alpha = 0.;
-
-		[_buttons addObject:button];
-
+        
+        contentWidthOffset = lastFirstButtonWidth - CGRectGetWidth(newFrame);
+        
 		if (self.isVisible) {
+            button.alpha = 0.;
 			[UIView animateWithDuration:0.3 animations:^{
 				firstButton.frame = newFrame;
 				button.alpha = 1.;
-				button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
-				[self setMaxSizeForAllButtons];
+				button.frame = [self frameWithButtonTitile:title type:type];
 			}];
 		}
 		else {
 			firstButton.frame = newFrame;
 			button.alpha = 1.;
-			button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
-			[self setMaxSizeForAllButtons];
+			button.frame = [self frameWithButtonTitile:title type:type];
 		}
 	}
 
 	[_bottomScrollView addSubview:button];
 
-	CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
-	_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollView.contentSize.height);
+	CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame) - contentWidthOffset;
+	_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollViewHeight);
 }
 
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font
@@ -897,7 +936,8 @@ static CXAlertView *__cx_alert_current_view;
 - (void)updateBlurBackground
 {
     UIColor *containerBKGColor = _viewBackgroundColor ? _viewBackgroundColor : [UIColor whiteColor];
-    self.containerView.backgroundColor = [containerBKGColor colorWithAlphaComponent:_showBlurBackground ? 0.7 : 1.];;
+    self.blurView.backgroundView.backgroundColor = containerBKGColor;
+    self.containerView.backgroundColor = [containerBKGColor colorWithAlphaComponent:_showBlurBackground ? 0. : 1.];;
 
     if (_showBlurBackground) {
         if (self.blurView == nil) {
@@ -936,6 +976,27 @@ static CXAlertView *__cx_alert_current_view;
     }
 }
 
+- (void)setButtonHeight:(CGFloat)buttonHeight
+{
+    if (_buttonHeight == buttonHeight) {
+        return;
+    }
+    _buttonHeight = buttonHeight;
+    
+    if (_bottomScrollViewHeight < _buttonHeight) {
+        _bottomScrollViewHeight = _buttonHeight;
+        [self updateBottomScrollView];
+    }
+}
+
+- (void)setBottomScrollViewHeight:(CGFloat)bottomScrollViewHeight
+{
+    if (_bottomScrollViewHeight == bottomScrollViewHeight) {
+        return;
+    }
+    _bottomScrollViewHeight = bottomScrollViewHeight;
+    [self updateBottomScrollView];
+}
 #pragma mark - UIAppearance setters
 
 - (void)setViewBackgroundColor:(UIColor *)viewBackgroundColor

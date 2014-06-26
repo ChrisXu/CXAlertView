@@ -36,18 +36,25 @@
     return self;
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+}
+
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
     
     _toolbar.frame = self.bounds;
+    _backgroundView.frame = self.bounds;
 }
 
-- (void)setAlpha:(CGFloat)alpha
+#pragma mark - PB
+- (void)blur
 {
-    alpha = MIN(0.9, alpha);
-    
-    [super setAlpha:alpha];
+    [UIView animateWithDuration:0.3 animations:^{
+        _backgroundView.alpha = 0.7;
+    }];
 }
 
 #pragma - PV
@@ -55,8 +62,14 @@
 {
     if (!_toolbar) {
         _toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
-        //            _toolbar.barStyle = UIBarStyleBlack;
+        _toolbar.translucent = YES;
+        _toolbar.barStyle = UIBarStyleBlack;
         [self.layer insertSublayer:_toolbar.layer atIndex:0];
+
+        _backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+        _backgroundView.alpha = 1.;
+        _backgroundView.backgroundColor = [UIColor whiteColor];
+        [self.layer insertSublayer:_backgroundView.layer above:_toolbar.layer];
     }
 }
 

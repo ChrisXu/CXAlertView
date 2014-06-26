@@ -20,6 +20,18 @@
     return self;
 }
 
+- (void)setHighlighted:(BOOL)highlighted
+{
+    [super setHighlighted:highlighted];
+    
+    if (highlighted) {
+        self.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3];
+    }
+    else {
+        self.backgroundColor = [UIColor clearColor];
+    }
+}
+
 - (void)drawRect:(CGRect)rect
 {
     if (_defaultRightLineVisible) {

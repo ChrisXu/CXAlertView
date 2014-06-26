@@ -10,4 +10,8 @@
 
 @interface CXBlurView : UIView
 
+@property (nonatomic, strong) UIView *backgroundView;
+
+- (void)blur;
+
 @end
