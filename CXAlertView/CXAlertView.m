@@ -14,15 +14,18 @@
 #import <QuartzCore/QuartzCore.h>
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
-	#define LBM NSLineBreakByTruncatingTail
-	#define BT_LBM NSLineBreakByWordWrapping
+    #define LBM NSLineBreakByTruncatingTail
+    #define BT_LBM NSLineBreakByWordWrapping
+    #define TA_CENTER NSTextAlignmentCenter
 #else
-	#define LBM UILineBreakModeTailTruncation
-	#define BT_LBM UILineBreakModeWordWrap
+    #define LBM UILineBreakModeTailTruncation
+    #define BT_LBM UILineBreakModeWordWrap
+    #define TA_CENTER UITextAlignmentCenter
 #endif
 
 static CGFloat const kDefaultScrollViewPadding = 10.;
 static CGFloat const kDefaultButtonHeight = 44.;
+static CGFloat const kDefaultNoButtonHeight = 0.;
 static CGFloat const kDefaultContainerWidth = 280.;
 static CGFloat const kDefaultVericalPadding = 10.;
 static CGFloat const kDefaultTopScrollViewMaxHeight = 50.;
@@ -223,14 +226,21 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         _contentView = contentView;
 
         _scrollViewPadding = kDefaultScrollViewPadding;
-        _buttonHeight = kDefaultButtonHeight;
+        if (cancelButtonTitle) {
+            _buttonHeight = kDefaultButtonHeight;
+            _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
+            _showButtonLine = YES;
+        }else{
+            _buttonHeight = kDefaultNoButtonHeight;
+            _bottomScrollViewHeight = kDefaultNoButtonHeight;
+        }
+        
         _containerWidth = kDefaultContainerWidth;
         _vericalPadding = kDefaultVericalPadding;
         _topScrollViewMaxHeight = kDefaultTopScrollViewMaxHeight;
         _topScrollViewMinHeight = kDefaultTopScrollViewMinHeight;
         _contentScrollViewMaxHeight = kDefaultContentScrollViewMaxHeight;
         _contentScrollViewMinHeight = kDefaultContentScrollViewMinHeight;
-        _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
 
 		_buttonFont=[UIFont systemFontOfSize:[UIFont buttonFontSize]];
 		_cancelButtonFont = [UIFont boldSystemFontOfSize:[UIFont buttonFontSize]];
@@ -633,6 +643,8 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
 - (void)updateBottomScrollView
 {
+    _bottomScrollView.defaultTopLineVisible = _showButtonLine;
+	
     CGFloat y = 0;
 
     y += [self heightForTopScrollView] + self.scrollViewPadding;
@@ -818,7 +830,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     button.defaultRightLineVisible = _showButtonLine;
     [button setTitle:title forState:UIControlStateNormal];
 
-	button.titleLabel.textAlignment=UITextAlignmentCenter;
+	button.titleLabel.textAlignment=TA_CENTER;
 	[button.titleLabel setNumberOfLines:0];
 	button.titleLabel.lineBreakMode=BT_LBM;
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
@@ -829,6 +841,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     if ([_buttons count] == 1)
 	{
 		button.defaultRightLineVisible = NO;
+
 		button.frame = [self frameWithButtonTitile:title type:type];
 	}
 	else
@@ -839,7 +852,6 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         CGFloat lastFirstButtonWidth = CGRectGetWidth(firstButton.frame);
 		CGRect newFrame = CGRectMake( 0, 0, self.containerWidth/2, CGRectGetHeight(firstButton.frame));
 		newFrame.origin.x = 0;
-        
         contentWidthOffset = lastFirstButtonWidth - CGRectGetWidth(newFrame);
         
 		if (self.isVisible) {
@@ -1117,5 +1129,14 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     }
     _showBlurBackground = showBlurBackground;
     [self updateBlurBackground];
+}
+
+- (void)setShowButtonLine:(BOOL)showButtonLine
+{
+    if (_showButtonLine == showButtonLine) {
+        return;
+    }
+    _showButtonLine = showButtonLine;
+    [self updateBottomScrollView];
 }
 @end
