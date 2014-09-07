@@ -512,6 +512,7 @@ static CXAlertView *__cx_alert_current_view;
     if (!_bottomScrollView) {
         _bottomScrollView = [[CXAlertButtonContainerView alloc] init];
         _bottomScrollView.defaultTopLineVisible = _showButtonLine;
+        _bottomScrollView.showsHorizontalScrollIndicator = NO;
     }
 }
 
@@ -835,7 +836,12 @@ static CXAlertView *__cx_alert_current_view;
 
 	[_bottomScrollView addSubview:button];
 
-	CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
+    CGFloat newContentWidth = 0;
+    if ([_buttons count] <= 2) {
+        newContentWidth = self.containerWidth;
+    } else {
+        newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame);
+    }
 	_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollView.contentSize.height);
 }
 
