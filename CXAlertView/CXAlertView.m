@@ -354,7 +354,14 @@ static CXAlertView *__cx_alert_current_view;
 + (void)showBackground
 {
     if (!__cx_alert_background_window) {
-        __cx_alert_background_window = [[CXAlertBackgroundWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        CGRect frame;
+        if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)]) {
+            frame = [UIScreen mainScreen].nativeBounds;
+        }
+        else {
+            frame = [UIScreen mainScreen].bounds;
+        }
+        __cx_alert_background_window = [[CXAlertBackgroundWindow alloc] initWithFrame:frame];
 
         [__cx_alert_background_window makeKeyAndVisible];
         __cx_alert_background_window.alpha = 0;
