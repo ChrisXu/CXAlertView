@@ -355,12 +355,16 @@ static CXAlertView *__cx_alert_current_view;
 {
     if (!__cx_alert_background_window) {
         CGRect frame;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
         if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)]) {
             frame = [UIScreen mainScreen].nativeBounds;
         }
         else {
             frame = [UIScreen mainScreen].bounds;
         }
+#else
+        frame = [UIScreen mainScreen].bounds;
+#endif
         __cx_alert_background_window = [[CXAlertBackgroundWindow alloc] initWithFrame:frame];
 
         [__cx_alert_background_window makeKeyAndVisible];
