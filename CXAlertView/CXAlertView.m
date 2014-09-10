@@ -227,11 +227,11 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
         _scrollViewPadding = kDefaultScrollViewPadding;
         if (cancelButtonTitle) {
-            _buttonHeight = kDefaultButtonHeight;
+            self.buttonHeight = kDefaultButtonHeight;
             _bottomScrollViewHeight = kDefaultBottomScrollViewHeight;
             _showButtonLine = YES;
         }else{
-            _buttonHeight = kDefaultNoButtonHeight;
+            self.buttonHeight = kDefaultNoButtonHeight;
             _bottomScrollViewHeight = kDefaultNoButtonHeight;
         }
         
@@ -470,6 +470,9 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
 - (CGFloat)heightForBottomScrollView
 {
+    if (self.buttons.count > 0) {
+        return _maxButtonHeight;
+    }
     return self.bottomScrollViewHeight;
 }
 
@@ -561,6 +564,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     if (!_bottomScrollView) {
         _bottomScrollView = [[CXAlertButtonContainerView alloc] init];
         _bottomScrollView.defaultTopLineVisible = _showButtonLine;
+        _bottomScrollView.showsHorizontalScrollIndicator = NO;
     }
 }
 
@@ -797,6 +801,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
 - (CGRect)frameWithButtonTitile:(NSString *)title type:(CXAlertViewButtonType)type
 {
+    self.buttonHeight = kDefaultButtonHeight;
     CGRect frame;
     frame.size = CGSizeMake(self.containerWidth/2, self.buttonHeight);
     
@@ -814,9 +819,16 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     
     UIFont *font = [self fontForButtonType:type];
     
-	CGFloat newHeight = [title sizeWithFont:font constrainedToSize:frame.size lineBreakMode:BT_LBM].height;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
+    CGRect rect = [title boundingRectWithSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:font} context:nil];
+    CGFloat newHeight = rect.size.height;
+#else
+    CGFloat newHeight = [title sizeWithFont:font constrainedToSize:frame.size lineBreakMode:BT_LBM].height;
+#endif
     
     frame.size.height = MAX(newHeight, self.buttonHeight);
+    
+    _maxButtonHeight = MAX(_maxButtonHeight, frame.size.height);
     
     return frame;
 }
@@ -833,7 +845,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 	button.titleLabel.textAlignment=TA_CENTER;
 	[button.titleLabel setNumberOfLines:0];
 	button.titleLabel.lineBreakMode=BT_LBM;
-	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
+//	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
 
     CGFloat contentWidthOffset = 0.;
     [_buttons addObject:button];
@@ -855,11 +867,13 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         contentWidthOffset = lastFirstButtonWidth - CGRectGetWidth(newFrame);
         
 		if (self.isVisible) {
+            CGRect buttonFrame = [self frameWithButtonTitile:title type:type];
             button.alpha = 0.;
+            button.frame = CGRectMake( 0, 0, CGRectGetWidth(buttonFrame), CGRectGetHeight(buttonFrame));
 			[UIView animateWithDuration:0.3 animations:^{
 				firstButton.frame = newFrame;
 				button.alpha = 1.;
-				button.frame = [self frameWithButtonTitile:title type:type];
+				button.frame = buttonFrame;
 			}];
 		}
 		else {
