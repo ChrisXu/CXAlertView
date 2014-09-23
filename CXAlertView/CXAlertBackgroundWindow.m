@@ -18,6 +18,7 @@ const UIWindowLevel UIWindowLevelCXAlertBackground = 1998.0;
     self = [super initWithFrame:frame];
     if (self) {
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.autoresizesSubviews = YES;
         self.opaque = NO;
         self.windowLevel = UIWindowLevelAlert - 1;
     }
