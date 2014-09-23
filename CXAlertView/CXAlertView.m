@@ -67,7 +67,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.opaque = NO;
         self.windowLevel = UIWindowLevelAlert - 1;
-        
+
         self.rootViewController = [[CXTempViewController alloc] init];
         self.rootViewController.view.backgroundColor = [UIColor clearColor];
     }
@@ -77,7 +77,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+
     [[UIColor colorWithWhite:0 alpha:0.5] set];
     CGContextFillRect(context, self.bounds);
 }
@@ -234,7 +234,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
             self.buttonHeight = kDefaultNoButtonHeight;
             _bottomScrollViewHeight = kDefaultNoButtonHeight;
         }
-        
+
         _containerWidth = kDefaultContainerWidth;
         _vericalPadding = kDefaultVericalPadding;
         _topScrollViewMaxHeight = kDefaultTopScrollViewMaxHeight;
@@ -316,7 +316,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
     CXAlertViewController *viewController = [[CXAlertViewController alloc] initWithNibName:nil bundle:nil];
     viewController.alertView = self;
-    
+
     if ([self.oldKeyWindow.rootViewController respondsToSelector:@selector(prefersStatusBarHidden)]) {
         viewController.rootViewControllerPrefersStatusBarHidden = self.oldKeyWindow.rootViewController.prefersStatusBarHidden;
         __cx_statsu_prefersStatusBarHidden = self.oldKeyWindow.rootViewController.prefersStatusBarHidden;
@@ -431,7 +431,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         __cx_alert_background_window = nil;
         return;
     }
-    
+
     [UIView animateWithDuration:0.3
                      animations:^{
                          __cx_alert_background_window.alpha = 0;
@@ -659,7 +659,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 - (void)updateBottomScrollView
 {
     _bottomScrollView.defaultTopLineVisible = _showButtonLine;
-	
+
     CGFloat y = 0;
 
     y += [self heightForTopScrollView] + self.scrollViewPadding;
@@ -670,7 +670,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
     _bottomScrollView.backgroundColor = [UIColor clearColor];
     _bottomScrollView.frame = CGRectMake( 0, y, self.containerWidth, [self heightForBottomScrollView]);
-    
+
     if (![_containerView.subviews containsObject:_bottomScrollView]) {
         [_containerView addSubview:_bottomScrollView];
     }
@@ -810,38 +810,53 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 	return font;
 }
 
-- (CGRect)frameWithButtonTitile:(NSString *)title type:(CXAlertViewButtonType)type
+-(CGFloat)heightThatFitsButton:(CXAlertButtonItem*)button
 {
-    self.buttonHeight = kDefaultButtonHeight;
-    CGRect frame;
-    frame.size = CGSizeMake(self.containerWidth/2, self.buttonHeight);
-    
-    if (_buttons.count == 1) {
-        frame.origin = CGPointMake(0., 0.);
-        frame.size.width = self.containerWidth;
+	CGSize desiredSize=button.frame.size;
+	desiredSize.height=desiredSize.height;
+	desiredSize.width=desiredSize.width-20;
+
+	UIFont *fnt=[self fontForButtonType:button.type];
+	CGFloat btht=[button.title sizeWithFont:fnt constrainedToSize:desiredSize lineBreakMode:BT_LBM].height;
+	return ceil(btht)+22;
+}
+
+-(void)setMaxSizeForAllButtons
+{
+    CGFloat maxHeight=22;
+    for(CXAlertButtonItem *button in self.buttons)
+    {
+        CGFloat ht=[self heightThatFitsButton:button];
+        if(ht>maxHeight)
+        {
+            maxHeight=ht;
+        }
     }
-    else if (_buttons.count == 2) {
-        frame.origin = CGPointMake(self.containerWidth/2, 0.);
+
+    if (self.layoutButtonsVertical) {
+        CGFloat ht = 0;
+        for(CXAlertButtonItem *button in self.buttons) {
+            CGRect rect = button.frame;
+            rect.size.height = maxHeight;
+            rect.origin.y = ht;
+            ht += maxHeight;
+            button.frame = rect;
+        }
+        _bottomScrollView.contentSize = CGSizeMake(self.frame.size.width, ht);
+        _bottomScrollViewHeight = ht;
+    } else {
+
+
+        for(CXAlertButtonItem *button in self.buttons)
+        {
+            CGRect rect=button.frame;
+            rect.size.height=maxHeight;
+            button.frame=rect;
+        }
+
+        _bottomScrollView.contentSize = CGSizeMake( _bottomScrollView.contentSize.width, maxHeight);
+        _bottomScrollViewHeight=maxHeight;
     }
-    else {
-        CXAlertButtonItem *lastButton = _buttons[_buttons.count - 2];
-        frame.origin = CGPointMake(CGRectGetMaxX(lastButton.frame), 0);
-    }
-    
-    UIFont *font = [self fontForButtonType:type];
-    
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
-    CGRect rect = [title boundingRectWithSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:font} context:nil];
-    CGFloat newHeight = rect.size.height;
-#else
-    CGFloat newHeight = [title sizeWithFont:font constrainedToSize:frame.size lineBreakMode:BT_LBM].height;
-#endif
-    
-    frame.size.height = MAX(newHeight, self.buttonHeight);
-    
-    _maxButtonHeight = MAX(_maxButtonHeight, frame.size.height);
-    
-    return frame;
 }
 
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
@@ -851,6 +866,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     button.action = handler;
     button.type = type;
     button.defaultRightLineVisible = _showButtonLine;
+    button.bottomLineVisible = NO;
     [button setTitle:title forState:UIControlStateNormal];
 
 	button.titleLabel.textAlignment=TA_CENTER;
@@ -858,39 +874,57 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 	button.titleLabel.lineBreakMode=BT_LBM;
 //	[button setTitleEdgeInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
 
-    CGFloat contentWidthOffset = 0.;
-    [_buttons addObject:button];
-    
-    if ([_buttons count] == 1)
-	{
+
+    if ([_buttons count] == 0) {
 		button.defaultRightLineVisible = NO;
 
-		button.frame = [self frameWithButtonTitile:title type:type];
-	}
-	else
-	{
+		[_buttons addObject:button];
+		[self setMaxSizeForAllButtons];
+	} else if (self.layoutButtonsVertical) {
+        // Vertical buttons are simpler - just grow downwards instead
+        CXAlertButtonItem *lastButton = self.buttons.lastObject;
+        lastButton.bottomLineVisible = _showButtonLine;
+
+        CGRect lastFrame = lastButton.frame;
+        lastFrame.origin.y += self.buttonHeight;
+        button.frame = lastFrame;
+        button.defaultRightLineVisible = NO;
+
+        [self.buttons addObject:button];
+        [self setMaxSizeForAllButtons];
+    } else {
 		// correct first button
 		CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
 		firstButton.defaultRightLineVisible = _showButtonLine;
         CGFloat lastFirstButtonWidth = CGRectGetWidth(firstButton.frame);
 		CGRect newFrame = CGRectMake( 0, 0, self.containerWidth/2, CGRectGetHeight(firstButton.frame));
 		newFrame.origin.x = 0;
-        contentWidthOffset = lastFirstButtonWidth - CGRectGetWidth(newFrame);
-        
+        newFrame.size.width = self.containerWidth/2;
+		[firstButton setNeedsDisplay];
+
+		CGFloat last_x = self.containerWidth/2 * [_buttons count];
+		button.frame = CGRectMake( last_x + self.containerWidth/2, 0, self.containerWidth/2, self.buttonHeight);
+		button.alpha = 0.;
+
+		[_buttons addObject:button];
+
+        void (^setButtonFrames)() = ^{
+            firstButton.frame = newFrame;
+            button.alpha = 1.;
+            button.frame = CGRectMake( last_x, 0, self.containerWidth/2, self.buttonHeight);
+            [self setMaxSizeForAllButtons];
+        };
+
 		if (self.isVisible) {
             CGRect buttonFrame = [self frameWithButtonTitile:title type:type];
             button.alpha = 0.;
             button.frame = CGRectMake( 0, 0, CGRectGetWidth(buttonFrame), CGRectGetHeight(buttonFrame));
 			[UIView animateWithDuration:0.3 animations:^{
-				firstButton.frame = newFrame;
-				button.alpha = 1.;
-				button.frame = buttonFrame;
+                setButtonFrames();
 			}];
 		}
 		else {
-			firstButton.frame = newFrame;
-			button.alpha = 1.;
-			button.frame = [self frameWithButtonTitile:title type:type];
+            setButtonFrames();
 		}
 	}
 
@@ -1019,7 +1053,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         return;
     }
     _buttonHeight = buttonHeight;
-    
+
     if (_bottomScrollViewHeight < _buttonHeight) {
         _bottomScrollViewHeight = _buttonHeight;
         [self updateBottomScrollView];
