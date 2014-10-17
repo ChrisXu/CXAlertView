@@ -67,7 +67,6 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.opaque = NO;
         self.windowLevel = UIWindowLevelAlert - 1;
-        
         self.rootViewController = [[CXTempViewController alloc] init];
         self.rootViewController.view.backgroundColor = [UIColor clearColor];
     }
@@ -77,7 +76,6 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
     [[UIColor colorWithWhite:0 alpha:0.5] set];
     CGContextFillRect(context, self.bounds);
 }
@@ -224,7 +222,6 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         _buttons = [[NSMutableArray alloc] init];
         _title = title;
         _contentView = contentView;
-
         _scrollViewPadding = kDefaultScrollViewPadding;
         if (cancelButtonTitle) {
             self.buttonHeight = kDefaultButtonHeight;
@@ -234,7 +231,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
             self.buttonHeight = kDefaultNoButtonHeight;
             _bottomScrollViewHeight = kDefaultNoButtonHeight;
         }
-        
+
         _containerWidth = kDefaultContainerWidth;
         _vericalPadding = kDefaultVericalPadding;
         _topScrollViewMaxHeight = kDefaultTopScrollViewMaxHeight;
@@ -431,7 +428,6 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         __cx_alert_background_window = nil;
         return;
     }
-    
     [UIView animateWithDuration:0.3
                      animations:^{
                          __cx_alert_background_window.alpha = 0;
@@ -846,11 +842,14 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
 - (void)addButtonWithTitle:(NSString *)title type:(CXAlertViewButtonType)type handler:(CXAlertButtonHandler)handler font:(UIFont *)font
 {
+    CXAlertButtonItem *lastButton = [_buttons lastObject];
+    lastButton.defaultRightLineVisible = _showButtonLine;
+    
     CXAlertButtonItem *button = [self buttonItemWithType:type font:font];
     button.title = title;
     button.action = handler;
     button.type = type;
-    button.defaultRightLineVisible = _showButtonLine;
+    button.defaultRightLineVisible = NO;
     [button setTitle:title forState:UIControlStateNormal];
 
 	button.titleLabel.textAlignment=TA_CENTER;
@@ -864,7 +863,6 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     if ([_buttons count] == 1)
 	{
 		button.defaultRightLineVisible = NO;
-
 		button.frame = [self frameWithButtonTitile:title type:type];
 	}
 	else
@@ -895,9 +893,8 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 	}
 
 	[_bottomScrollView addSubview:button];
-
-	CGFloat newContentWidth = self.bottomScrollView.contentSize.width + CGRectGetWidth(button.frame) - contentWidthOffset;
-	_bottomScrollView.contentSize = CGSizeMake( newContentWidth, _bottomScrollViewHeight);
+    
+    _bottomScrollView.contentSize = CGSizeMake(CGRectGetMaxX(button.frame), _maxButtonHeight);
 }
 
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font
