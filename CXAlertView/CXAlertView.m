@@ -46,15 +46,20 @@ static CXAlertBackgroundWindow *__cx_alert_background_window;
 static CXAlertView *__cx_alert_current_view;
 static BOOL __cx_statsu_prefersStatusBarHidden;
 
-@interface CXAlertBackgroundWindow : UIWindow
-
-@end
-
 @interface CXTempViewController : UIViewController
 
 @end
 
-@interface CXAlertBackgroundWindow ()
+@implementation CXTempViewController
+
+- (BOOL)prefersStatusBarHidden
+{
+    return __cx_statsu_prefersStatusBarHidden;
+}
+
+@end
+
+@interface CXAlertBackgroundWindow : UIWindow
 
 @end
 
@@ -78,15 +83,6 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[UIColor colorWithWhite:0 alpha:0.5] set];
     CGContextFillRect(context, self.bounds);
-}
-
-@end
-
-@implementation CXTempViewController
-
-- (BOOL)prefersStatusBarHidden
-{
-    return __cx_statsu_prefersStatusBarHidden;
 }
 
 @end
