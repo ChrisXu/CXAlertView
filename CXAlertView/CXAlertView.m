@@ -396,25 +396,35 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 {
     if (!__cx_alert_background_window) {
         
-        
-        CGSize screenSize = [self countScreenSize];
+        CGSize screenSize = [self currentScreenSize];
 
         __cx_alert_background_window = [[CXAlertBackgroundWindow alloc] initWithFrame:CGRectMake(0, 0, screenSize.width, screenSize.height)];
-        
-        [__cx_alert_background_window makeKeyAndVisible];
-        __cx_alert_background_window.alpha = 0;
-        [UIView animateWithDuration:0.3
-                         animations:^{
-                             __cx_alert_background_window.alpha = 1;
-                         }];
     }
+    
+    [__cx_alert_background_window makeKeyAndVisible];
+    __cx_alert_background_window.alpha = 0;
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         __cx_alert_background_window.alpha = 1;
+                     }];
 }
 
-+ (CGSize)countScreenSize
++ (CGSize)currentScreenSize
 {
+    CGRect frame;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)]) {
+        frame = [UIScreen mainScreen].nativeBounds;
+    }
+    else {
+        frame = [UIScreen mainScreen].bounds;
+    }
+#else
+    frame = [UIScreen mainScreen].bounds;
+#endif
     
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    CGFloat screenWidth = frame.size.width;
+    CGFloat screenHeight = frame.size.height;
     
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
