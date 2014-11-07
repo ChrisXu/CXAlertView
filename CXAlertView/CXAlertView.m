@@ -395,19 +395,12 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 + (void)showBackground
 {
     if (!__cx_alert_background_window) {
-        CGRect frame;
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-        if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)]) {
-            frame = [UIScreen mainScreen].nativeBounds;
-        }
-        else {
-            frame = [UIScreen mainScreen].bounds;
-        }
-#else
-        frame = [UIScreen mainScreen].bounds;
-#endif
-        __cx_alert_background_window = [[CXAlertBackgroundWindow alloc] initWithFrame:frame];
+        
+        
+        CGSize screenSize = [self countScreenSize];
 
+        __cx_alert_background_window = [[CXAlertBackgroundWindow alloc] initWithFrame:CGRectMake(0, 0, screenSize.width, screenSize.height)];
+        
         [__cx_alert_background_window makeKeyAndVisible];
         __cx_alert_background_window.alpha = 0;
         [UIView animateWithDuration:0.3
@@ -416,6 +409,23 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
                          }];
     }
 }
+
++ (CGSize)countScreenSize
+{
+    
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    
+    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+        CGFloat tmp = screenWidth;
+        screenWidth = screenHeight;
+        screenHeight = tmp;
+    }
+    
+    return CGSizeMake(screenWidth, screenHeight);
+}
+
 
 + (void)hideBackgroundAnimated:(BOOL)animated
 {
