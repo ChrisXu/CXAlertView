@@ -427,7 +427,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     CGFloat screenHeight = frame.size.height;
     
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+    if (UIInterfaceOrientationIsLandscape(interfaceOrientation) && ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)) {
         CGFloat tmp = screenWidth;
         screenWidth = screenHeight;
         screenHeight = tmp;
