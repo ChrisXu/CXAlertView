@@ -1,0 +1,411 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7ED892591B3D6A8900094A27 /* libCXAlertView-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */; };
+		7ED892721B3D6AAC00094A27 /* CXAlertButtonContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED892691B3D6AAC00094A27 /* CXAlertButtonContainerView.m */; };
+		7ED892731B3D6AAC00094A27 /* CXAlertButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED8926B1B3D6AAC00094A27 /* CXAlertButtonItem.m */; };
+		7ED892741B3D6AAC00094A27 /* CXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED8926D1B3D6AAC00094A27 /* CXAlertView.m */; };
+		7ED892751B3D6AAC00094A27 /* CXAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED8926F1B3D6AAC00094A27 /* CXAlertViewController.m */; };
+		7ED892761B3D6AAC00094A27 /* CXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED892711B3D6AAC00094A27 /* CXBlurView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7ED8925A1B3D6A8900094A27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ED892451B3D6A8900094A27 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7ED8924C1B3D6A8900094A27;
+			remoteInfo = "CXAlertView-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7ED8924B1B3D6A8900094A27 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libCXAlertView-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7ED892581B3D6A8900094A27 /* CXAlertView-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CXAlertView-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7ED8925E1B3D6A8900094A27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7ED892681B3D6AAC00094A27 /* CXAlertButtonContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertButtonContainerView.h; sourceTree = "<group>"; };
+		7ED892691B3D6AAC00094A27 /* CXAlertButtonContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertButtonContainerView.m; sourceTree = "<group>"; };
+		7ED8926A1B3D6AAC00094A27 /* CXAlertButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertButtonItem.h; sourceTree = "<group>"; };
+		7ED8926B1B3D6AAC00094A27 /* CXAlertButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertButtonItem.m; sourceTree = "<group>"; };
+		7ED8926C1B3D6AAC00094A27 /* CXAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertView.h; sourceTree = "<group>"; };
+		7ED8926D1B3D6AAC00094A27 /* CXAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertView.m; sourceTree = "<group>"; };
+		7ED8926E1B3D6AAC00094A27 /* CXAlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertViewController.h; sourceTree = "<group>"; };
+		7ED8926F1B3D6AAC00094A27 /* CXAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertViewController.m; sourceTree = "<group>"; };
+		7ED892701B3D6AAC00094A27 /* CXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXBlurView.h; sourceTree = "<group>"; };
+		7ED892711B3D6AAC00094A27 /* CXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXBlurView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7ED8924A1B3D6A8900094A27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7ED892551B3D6A8900094A27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7ED892591B3D6A8900094A27 /* libCXAlertView-iOS.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7ED892441B3D6A8900094A27 = {
+			isa = PBXGroup;
+			children = (
+				7ED892671B3D6AAC00094A27 /* CXAlertView */,
+				7ED8925C1B3D6A8900094A27 /* CXAlertView-iOSTests */,
+				7ED8924E1B3D6A8900094A27 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7ED8924E1B3D6A8900094A27 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */,
+				7ED892581B3D6A8900094A27 /* CXAlertView-iOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7ED8925C1B3D6A8900094A27 /* CXAlertView-iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				7ED8925D1B3D6A8900094A27 /* Supporting Files */,
+			);
+			path = "CXAlertView-iOSTests";
+			sourceTree = "<group>";
+		};
+		7ED8925D1B3D6A8900094A27 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7ED8925E1B3D6A8900094A27 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7ED892671B3D6AAC00094A27 /* CXAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				7ED892681B3D6AAC00094A27 /* CXAlertButtonContainerView.h */,
+				7ED892691B3D6AAC00094A27 /* CXAlertButtonContainerView.m */,
+				7ED8926A1B3D6AAC00094A27 /* CXAlertButtonItem.h */,
+				7ED8926B1B3D6AAC00094A27 /* CXAlertButtonItem.m */,
+				7ED8926C1B3D6AAC00094A27 /* CXAlertView.h */,
+				7ED8926D1B3D6AAC00094A27 /* CXAlertView.m */,
+				7ED8926E1B3D6AAC00094A27 /* CXAlertViewController.h */,
+				7ED8926F1B3D6AAC00094A27 /* CXAlertViewController.m */,
+				7ED892701B3D6AAC00094A27 /* CXBlurView.h */,
+				7ED892711B3D6AAC00094A27 /* CXBlurView.m */,
+			);
+			name = CXAlertView;
+			path = ../CXAlertView;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7ED8924C1B3D6A8900094A27 /* CXAlertView-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7ED892611B3D6A8900094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOS" */;
+			buildPhases = (
+				7ED892491B3D6A8900094A27 /* Sources */,
+				7ED8924A1B3D6A8900094A27 /* Frameworks */,
+				7ED8924B1B3D6A8900094A27 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CXAlertView-iOS";
+			productName = "CXAlertView-iOS";
+			productReference = 7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		7ED892571B3D6A8900094A27 /* CXAlertView-iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7ED892641B3D6A8900094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOSTests" */;
+			buildPhases = (
+				7ED892541B3D6A8900094A27 /* Sources */,
+				7ED892551B3D6A8900094A27 /* Frameworks */,
+				7ED892561B3D6A8900094A27 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7ED8925B1B3D6A8900094A27 /* PBXTargetDependency */,
+			);
+			name = "CXAlertView-iOSTests";
+			productName = "CXAlertView-iOSTests";
+			productReference = 7ED892581B3D6A8900094A27 /* CXAlertView-iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7ED892451B3D6A8900094A27 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = healthjoy;
+				TargetAttributes = {
+					7ED8924C1B3D6A8900094A27 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+					7ED892571B3D6A8900094A27 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+				};
+			};
+			buildConfigurationList = 7ED892481B3D6A8900094A27 /* Build configuration list for PBXProject "CXAlertView-iOS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7ED892441B3D6A8900094A27;
+			productRefGroup = 7ED8924E1B3D6A8900094A27 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7ED8924C1B3D6A8900094A27 /* CXAlertView-iOS */,
+				7ED892571B3D6A8900094A27 /* CXAlertView-iOSTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7ED892561B3D6A8900094A27 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7ED892491B3D6A8900094A27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7ED892751B3D6AAC00094A27 /* CXAlertViewController.m in Sources */,
+				7ED892761B3D6AAC00094A27 /* CXBlurView.m in Sources */,
+				7ED892731B3D6AAC00094A27 /* CXAlertButtonItem.m in Sources */,
+				7ED892721B3D6AAC00094A27 /* CXAlertButtonContainerView.m in Sources */,
+				7ED892741B3D6AAC00094A27 /* CXAlertView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7ED892541B3D6A8900094A27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7ED8925B1B3D6A8900094A27 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7ED8924C1B3D6A8900094A27 /* CXAlertView-iOS */;
+			targetProxy = 7ED8925A1B3D6A8900094A27 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7ED8925F1B3D6A8900094A27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					..,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7ED892601B3D6A8900094A27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					..,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7ED892621B3D6A8900094A27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		7ED892631B3D6A8900094A27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7ED892651B3D6A8900094A27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "CXAlertView-iOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7ED892661B3D6A8900094A27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "CXAlertView-iOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7ED892481B3D6A8900094A27 /* Build configuration list for PBXProject "CXAlertView-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7ED8925F1B3D6A8900094A27 /* Debug */,
+				7ED892601B3D6A8900094A27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7ED892611B3D6A8900094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7ED892621B3D6A8900094A27 /* Debug */,
+				7ED892631B3D6A8900094A27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7ED892641B3D6A8900094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7ED892651B3D6A8900094A27 /* Debug */,
+				7ED892661B3D6A8900094A27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7ED892451B3D6A8900094A27 /* Project object */;
+}
