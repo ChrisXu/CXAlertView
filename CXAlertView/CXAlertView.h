@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CXAlertButtonItem.h"
+#import <CXAlertView/CXAlertButtonItem.h>
 
 @class CXAlertView;
+
+
 typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @interface CXAlertView : UIView
 

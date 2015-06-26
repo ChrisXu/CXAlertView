@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CXAlertView.h"
+#import <CXAlertView/CXAlertView.h>
 
 @interface CXAlertViewController : UIViewController
 
