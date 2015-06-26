@@ -7,23 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7ED892591B3D6A8900094A27 /* libCXAlertView-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */; };
 		7ED892721B3D6AAC00094A27 /* CXAlertButtonContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED892691B3D6AAC00094A27 /* CXAlertButtonContainerView.m */; };
 		7ED892731B3D6AAC00094A27 /* CXAlertButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED8926B1B3D6AAC00094A27 /* CXAlertButtonItem.m */; };
 		7ED892741B3D6AAC00094A27 /* CXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED8926D1B3D6AAC00094A27 /* CXAlertView.m */; };
 		7ED892751B3D6AAC00094A27 /* CXAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED8926F1B3D6AAC00094A27 /* CXAlertViewController.m */; };
 		7ED892761B3D6AAC00094A27 /* CXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ED892711B3D6AAC00094A27 /* CXBlurView.m */; };
+		7ED892811B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7ED892801B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		7ED8925A1B3D6A8900094A27 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7ED892451B3D6A8900094A27 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7ED8924C1B3D6A8900094A27;
-			remoteInfo = "CXAlertView-iOS";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		7ED8924B1B3D6A8900094A27 /* CopyFiles */ = {
@@ -39,8 +29,6 @@
 
 /* Begin PBXFileReference section */
 		7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libCXAlertView-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7ED892581B3D6A8900094A27 /* CXAlertView-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CXAlertView-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7ED8925E1B3D6A8900094A27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7ED892681B3D6AAC00094A27 /* CXAlertButtonContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertButtonContainerView.h; sourceTree = "<group>"; };
 		7ED892691B3D6AAC00094A27 /* CXAlertButtonContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertButtonContainerView.m; sourceTree = "<group>"; };
 		7ED8926A1B3D6AAC00094A27 /* CXAlertButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXAlertButtonItem.h; sourceTree = "<group>"; };
@@ -51,6 +39,9 @@
 		7ED8926F1B3D6AAC00094A27 /* CXAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXAlertViewController.m; sourceTree = "<group>"; };
 		7ED892701B3D6AAC00094A27 /* CXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXBlurView.h; sourceTree = "<group>"; };
 		7ED892711B3D6AAC00094A27 /* CXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXBlurView.m; sourceTree = "<group>"; };
+		7ED8927C1B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "CXAlertView-iOS-dynamic.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7ED8927F1B3D6C9F00094A27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7ED892801B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CXAlertView-iOS-dynamic.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,11 +52,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7ED892551B3D6A8900094A27 /* Frameworks */ = {
+		7ED892781B3D6C9F00094A27 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7ED892591B3D6A8900094A27 /* libCXAlertView-iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,7 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				7ED892671B3D6AAC00094A27 /* CXAlertView */,
-				7ED8925C1B3D6A8900094A27 /* CXAlertView-iOSTests */,
+				7ED8927D1B3D6C9F00094A27 /* CXAlertView-iOS-dynamic */,
 				7ED8924E1B3D6A8900094A27 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,25 +75,9 @@
 			isa = PBXGroup;
 			children = (
 				7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */,
-				7ED892581B3D6A8900094A27 /* CXAlertView-iOSTests.xctest */,
+				7ED8927C1B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		7ED8925C1B3D6A8900094A27 /* CXAlertView-iOSTests */ = {
-			isa = PBXGroup;
-			children = (
-				7ED8925D1B3D6A8900094A27 /* Supporting Files */,
-			);
-			path = "CXAlertView-iOSTests";
-			sourceTree = "<group>";
-		};
-		7ED8925D1B3D6A8900094A27 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				7ED8925E1B3D6A8900094A27 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		7ED892671B3D6AAC00094A27 /* CXAlertView */ = {
@@ -124,7 +98,35 @@
 			path = ../CXAlertView;
 			sourceTree = "<group>";
 		};
+		7ED8927D1B3D6C9F00094A27 /* CXAlertView-iOS-dynamic */ = {
+			isa = PBXGroup;
+			children = (
+				7ED892801B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.h */,
+				7ED8927E1B3D6C9F00094A27 /* Supporting Files */,
+			);
+			path = "CXAlertView-iOS-dynamic";
+			sourceTree = "<group>";
+		};
+		7ED8927E1B3D6C9F00094A27 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7ED8927F1B3D6C9F00094A27 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7ED892791B3D6C9F00094A27 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7ED892811B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		7ED8924C1B3D6A8900094A27 /* CXAlertView-iOS */ = {
@@ -144,23 +146,23 @@
 			productReference = 7ED8924D1B3D6A8900094A27 /* libCXAlertView-iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		7ED892571B3D6A8900094A27 /* CXAlertView-iOSTests */ = {
+		7ED8927B1B3D6C9F00094A27 /* CXAlertView-iOS-dynamic */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7ED892641B3D6A8900094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOSTests" */;
+			buildConfigurationList = 7ED8928F1B3D6C9F00094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOS-dynamic" */;
 			buildPhases = (
-				7ED892541B3D6A8900094A27 /* Sources */,
-				7ED892551B3D6A8900094A27 /* Frameworks */,
-				7ED892561B3D6A8900094A27 /* Resources */,
+				7ED892771B3D6C9F00094A27 /* Sources */,
+				7ED892781B3D6C9F00094A27 /* Frameworks */,
+				7ED892791B3D6C9F00094A27 /* Headers */,
+				7ED8927A1B3D6C9F00094A27 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				7ED8925B1B3D6A8900094A27 /* PBXTargetDependency */,
 			);
-			name = "CXAlertView-iOSTests";
-			productName = "CXAlertView-iOSTests";
-			productReference = 7ED892581B3D6A8900094A27 /* CXAlertView-iOSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
+			name = "CXAlertView-iOS-dynamic";
+			productName = "CXAlertView-iOS-dynamic";
+			productReference = 7ED8927C1B3D6C9F00094A27 /* CXAlertView-iOS-dynamic.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -174,7 +176,7 @@
 					7ED8924C1B3D6A8900094A27 = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
-					7ED892571B3D6A8900094A27 = {
+					7ED8927B1B3D6C9F00094A27 = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
 				};
@@ -192,13 +194,13 @@
 			projectRoot = "";
 			targets = (
 				7ED8924C1B3D6A8900094A27 /* CXAlertView-iOS */,
-				7ED892571B3D6A8900094A27 /* CXAlertView-iOSTests */,
+				7ED8927B1B3D6C9F00094A27 /* CXAlertView-iOS-dynamic */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		7ED892561B3D6A8900094A27 /* Resources */ = {
+		7ED8927A1B3D6C9F00094A27 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -220,7 +222,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7ED892541B3D6A8900094A27 /* Sources */ = {
+		7ED892771B3D6C9F00094A27 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -228,14 +230,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		7ED8925B1B3D6A8900094A27 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7ED8924C1B3D6A8900094A27 /* CXAlertView-iOS */;
-			targetProxy = 7ED8925A1B3D6A8900094A27 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		7ED8925F1B3D6A8900094A27 /* Debug */ = {
@@ -345,35 +339,50 @@
 			};
 			name = Release;
 		};
-		7ED892651B3D6A8900094A27 /* Debug */ = {
+		7ED892901B3D6C9F00094A27 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "CXAlertView-iOSTests/Info.plist";
+				INFOPLIST_FILE = "CXAlertView-iOS-dynamic/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		7ED892661B3D6A8900094A27 /* Release */ = {
+		7ED892911B3D6C9F00094A27 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "CXAlertView-iOSTests/Info.plist";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "CXAlertView-iOS-dynamic/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -397,11 +406,11 @@
 			);
 			defaultConfigurationIsVisible = 0;
 		};
-		7ED892641B3D6A8900094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOSTests" */ = {
+		7ED8928F1B3D6C9F00094A27 /* Build configuration list for PBXNativeTarget "CXAlertView-iOS-dynamic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7ED892651B3D6A8900094A27 /* Debug */,
-				7ED892661B3D6A8900094A27 /* Release */,
+				7ED892901B3D6C9F00094A27 /* Debug */,
+				7ED892911B3D6C9F00094A27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
