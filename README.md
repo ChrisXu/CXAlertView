@@ -1,7 +1,7 @@
 CXAlertView
 ===========
 
-###Sorry guys, I was busy in survival a startup last year. I will make a update ASAP. You can mail me if you have any thoughts about improvement. 
+####Sorry guys, I was busy in survival a startup last year. I will make an update ASAP. You can mail me if you have any thoughts about improvement. 
 
 Version 1.1.0
 
