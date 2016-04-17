@@ -582,6 +582,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
     if (!_contentScrollView) {
         _contentScrollView = [[UIScrollView alloc] init];
+        _contentScrollView.autoresizesSubviews = NO;
     }
 
     if (!_bottomScrollView) {
