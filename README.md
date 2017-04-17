@@ -1,7 +1,7 @@
 CXAlertView
 ===========
 
-####Sorry guys, I was busy in survival a startup last year. I will make an update ASAP. You can mail me if you have any thoughts about improvement. 
+#### Sorry guys, I was busy in survival a startup last year. I will make an update ASAP. You can mail me if you have any thoughts about improvement. 
 
 Version 1.1.0
 
@@ -31,13 +31,13 @@ This is a custom alert view developed by Chris Xu and enhanced by other contribu
 ---
 
 
-##Installation
+## Installation
 
 * CocoaPods add `pod 'CXAlertView'`
 
 * If using as a git submodule, you will also need to add [LiveFrost](https://github.com/radi/LiveFrost.git)
 
-##How to use
+## How to use
 ---
 
 ```Objective-C
@@ -54,29 +54,29 @@ This is a custom alert view developed by Chris Xu and enhanced by other contribu
 - (void)cleanAllPenddingAlert;
 ```
 
-#####There are three parts of alertview, Top (Title View), Middle (Content View) and Bottom (Buttons Container). 
+##### There are three parts of alertview, Top (Title View), Middle (Content View) and Bottom (Buttons Container). 
  
  * `showButtonLine` show buttons dividing line.
  * `showBlurBackground` use blur background.
  
-##Next
+## Next
 ---
 
  * Replace blur function by `UIVisualEffect` in iOS8
  * Bug fix.
  
  
-##Thanks
+## Thanks
 ---
  * [SIAlertView](https://github.com/Sumi-Interactive/SIAlertView) for some tips to build this.
 
-##Support
+## Support
 ---
  * Xcode 5
  * Framework : QuartzCore, Accelerate
  * ARC
 
-##Contact
+## Contact
 ---
 #### Chris Xu
 
@@ -84,7 +84,7 @@ This is a custom alert view developed by Chris Xu and enhanced by other contribu
  * [@Twitter](https://twitter.com/taterctl)
  * [@Mail](mailto:taterctl@gmail.com)
 
-##License
+## License
 ---
 Copyright (c) 2013 Chris Xu, Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
 
