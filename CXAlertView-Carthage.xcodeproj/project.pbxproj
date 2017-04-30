@@ -1,0 +1,136 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		7E29B15A1B3D74E300C9266D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7E29B1541B3D74E300C9266D /* CXAlertView-iOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7ED8924D1B3D6A8900094A27;
+			remoteInfo = "CXAlertView-iOS";
+		};
+		7E29B15C1B3D74E300C9266D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7E29B1541B3D74E300C9266D /* CXAlertView-iOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7ED8927C1B3D6C9F00094A27;
+			remoteInfo = "CXAlertView-iOS-dynamic";
+		};
+		7E29B15E1B3D74E300C9266D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7E29B1541B3D74E300C9266D /* CXAlertView-iOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7ED892A41B3D6D5A00094A27;
+			remoteInfo = "CXAlertView-iOS-static";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7E29B1541B3D74E300C9266D /* CXAlertView-iOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CXAlertView-iOS.xcodeproj"; path = "CXAlertView-iOS/CXAlertView-iOS.xcodeproj"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		7E29B14D1B3D74CF00C9266D = {
+			isa = PBXGroup;
+			children = (
+				7E29B1541B3D74E300C9266D /* CXAlertView-iOS.xcodeproj */,
+			);
+			sourceTree = "<group>";
+		};
+		7E29B1551B3D74E300C9266D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7E29B15B1B3D74E300C9266D /* libCXAlertView-iOS.a */,
+				7E29B15D1B3D74E300C9266D /* CXAlertView.framework */,
+				7E29B15F1B3D74E300C9266D /* CXAlertView.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		7E29B14E1B3D74CF00C9266D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+			};
+			buildConfigurationList = 7E29B1511B3D74CF00C9266D /* Build configuration list for PBXProject "CXAlertView-Carthage" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7E29B14D1B3D74CF00C9266D;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7E29B1551B3D74E300C9266D /* Products */;
+					ProjectRef = 7E29B1541B3D74E300C9266D /* CXAlertView-iOS.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7E29B15B1B3D74E300C9266D /* libCXAlertView-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libCXAlertView-iOS.a";
+			remoteRef = 7E29B15A1B3D74E300C9266D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7E29B15D1B3D74E300C9266D /* CXAlertView.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CXAlertView.framework;
+			remoteRef = 7E29B15C1B3D74E300C9266D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7E29B15F1B3D74E300C9266D /* CXAlertView.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CXAlertView.framework;
+			remoteRef = 7E29B15E1B3D74E300C9266D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin XCBuildConfiguration section */
+		7E29B1521B3D74CF00C9266D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		7E29B1531B3D74CF00C9266D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7E29B1511B3D74CF00C9266D /* Build configuration list for PBXProject "CXAlertView-Carthage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E29B1521B3D74CF00C9266D /* Debug */,
+				7E29B1531B3D74CF00C9266D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7E29B14E1B3D74CF00C9266D /* Project object */;
+}

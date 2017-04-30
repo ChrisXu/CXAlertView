@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "CXAlertView.h"
+
 typedef NS_ENUM(NSInteger, CXAlertViewButtonType) {
     CXAlertViewButtonTypeDefault = 0,
     CXAlertViewButtonTypeCustom = 1,
